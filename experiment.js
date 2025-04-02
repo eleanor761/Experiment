@@ -1,14 +1,15 @@
-
+// Generate participant ID at the start
+let participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
 
 var jsPsych = initJsPsych();
 
     var filename = jsPsych.randomization.randomID(10) + ".csv";
     var timeline = [];
     
-    var preload = {
-        type: jsPsychPreload,
-        video: ['stimuli/norming/batent1.mp4'],
-    };
+    //var preload = {
+        //type: jsPsychPreload,
+        //video: ['stimuli/norming/batent1.mp4'],
+    //};
     //timeline.push(preload);
 
     var welcome = {

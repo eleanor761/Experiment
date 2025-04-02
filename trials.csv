@@ -1,0 +1,30 @@
+trial_num,count,type,dimension,file_name,action
+1,1,batent,initial,batent1.mp4,straighten frame
+2,2,batent,initial,batent2.mp4,straighten frame
+3,3,batent,initial,batent3.mp4,straighten frame
+4,4,batent,initial,batent4.mp4,straighten frame
+5,1,cabush,initial,cabush1.mp4,align books
+6,2,cabush,initial,cabush2.mp4,align books
+7,3,cabush,initial,cabush3.mp4,align books
+8,4,cabush,initial,cabush4.mp4,align books
+9,1,fremple,initial,fremple1.mp4,cut square
+10,2,fremple,initial,fremple2.mp4,cut square
+11,3,fremple,initial,fremple3.mp4,cut square
+12,4,fremple,initial,fremple4.mp4,cut square
+13,1,joicate,initial,joicate1.mp4,seal envelope
+14,1,lorice,initial,lorice1.mp4,pot to stove
+15,2,lorice,initial,lorice2.mp4,pot to stove
+16,3,lorice,initial,lorice3.mp4,pot to stove
+17,4,lorice,initial,lorice4.mp4,pot to stove
+18,1,nulmut,initial,nulmut1.mp4,hang coat
+19,2,nulmut,initial,nulmut2.mp4,hang coat
+20,3,nulmut,initial,nulmut3.mp4,hang coat
+21,1,pulact,initial,pulact1.mp4,rip paper
+22,1,punson,initial,punson1.mp4,cut to container
+23,2,punson,initial,punson2.mp4,cut to container
+24,3,punson,initial,punson3.mp4,cut to container
+25,1,samode,initial,samode1.mp4,cover candle
+26,1,traimin,object,traimin_obj.mp4,hole in cards
+27,1,traimin,initial,traimin1.mp4,hole in pile
+28,2,traimin,initial,traimin2.mp4,hole in pile
+29,3,traimin,initial,traimin3.mp4,hole in pile
