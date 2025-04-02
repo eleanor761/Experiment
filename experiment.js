@@ -11,9 +11,9 @@ const jsPsych = new jsPsychModule.JsPsych({
 const filename = jsPsych.randomization.randomID(10) + ".csv";
 let timeline = [];
 
-// Define the consent form
+// Define the consent form with correct plugin name
 const consent = {
-    type: jsPsychHtmlButtonResponse,
+    type: jsPsychPluginHtmlButtonResponse,  // This is the correct plugin name based on your logs
     stimulus: `
         <div style="width: 800px; margin: 0 auto; text-align: left">
             <h3>Consent to Participate in Research</h3>
@@ -48,7 +48,7 @@ const consent = {
 
 // Instructions block
 const instructions = {
-    type: jsPsychHtmlKeyboardResponse,
+    type: jsPsychPluginHtmlKeyboardResponse,  // Correct plugin name
     stimulus: `
         <p>In this experiment, you will see a video and will be asked to describe what is happening</p>
         <p>Press any key to begin.</p>
@@ -57,7 +57,7 @@ const instructions = {
 
 // Example video trial
 const sampleVideoTrial = {
-    type: jsPsychVideoKeyboardResponse,
+    type: jsPsychPluginVideoKeyboardResponse,  // Correct plugin name
     stimulus: ['stimuli/norming/batent1.mp4'],
     choices: ['Enter'],
     prompt: "<p>Press Enter after you've watched the video.</p>",
@@ -74,7 +74,7 @@ const sampleVideoTrial = {
 
 // Text response after video
 const responseTextTrial = {
-    type: jsPsychSurveyText,
+    type: jsPsychPluginSurveyText,  // Correct plugin name
     questions: [
         {
             prompt: 'Please describe what you saw in the video:', 
@@ -98,9 +98,9 @@ function getVideoPath(stimName) {
 // Function to load trials from CSV
 async function loadTrials() {
     try {
-        const filename = 'trials.csv'; // Path to your trials file
+        const csvFilename = 'trials.csv'; // Path to your trials file
         
-        const response = await fetch(filename);
+        const response = await fetch(csvFilename);
         const csvText = await response.text();
         
         const results = Papa.parse(csvText, {
@@ -132,22 +132,22 @@ function createTrials(trialsData) {
     const experimentTrials = [];
     
     trialsData.forEach(trial => {
-        // Skip if no filename is provided
-        if (!trial.filename) {
-            console.warn('Trial missing filename:', trial);
+        // Check for file_name since that's what the CSV uses
+        if (!trial.file_name) {
+            console.warn('Trial missing file_name:', trial);
             return;
         }
 
         // Create video trial
         const videoTrial = {
             type: jsPsychPluginVideoKeyboardResponse,
-            stimulus: [getVideoPath(trial.filename)],
+            stimulus: [getVideoPath(trial.file_name)],
             choices: ['Enter'],
             prompt: "<p>Press Enter after you've watched the video.</p>",
             height: 480,
             width: 480,
             data: {
-                video_id: trial.filename,
+                video_id: trial.file_name,
                 trial_num: trial.trial_num,
                 subCode: participant_id
             },
@@ -170,7 +170,7 @@ function createTrials(trialsData) {
             ],
             data: {
                 trial_type: 'response',
-                video_id: trial.filename,
+                video_id: trial.file_name,
                 trial_num: trial.trial_num,
                 subCode: participant_id
             }
@@ -182,34 +182,24 @@ function createTrials(trialsData) {
     return experimentTrials;
 }
 
+// Preload media files
+const preload = {
+    type: jsPsychPluginPreload,  // Correct plugin name
+    auto_preload: true
+};
+
 // Data saving configuration
 const save_data = {
-    type: jsPsychContribPipe,
+    type: jsPsychContribPluginPipe,  // Correct plugin name for DataPipe
     action: "save",
     experiment_id: "DvojIUx5ETI3",
     filename: filename,
     data_string: () => jsPsych.data.get().csv()
 };
 
-// Preload media files
-const preload = {
-    type: jsPsychPluginPreload,
-    auto_preload: true
-};
-
 // Main function to run the experiment
 async function runExperiment() {
     try {
-        // First, check if we have all needed plugins
-        console.log("Available plugins:", {
-            "HTML Button Response": typeof jsPsychPluginHtmlButtonResponse !== 'undefined',
-            "HTML Keyboard Response": typeof jsPsychPluginHtmlKeyboardResponse !== 'undefined',
-            "Video Keyboard Response": typeof jsPsychPluginVideoKeyboardResponse !== 'undefined',
-            "Survey Text": typeof jsPsychPluginSurveyText !== 'undefined',
-            "Preload": typeof jsPsychPluginPreload !== 'undefined',
-            "Pipe": typeof jsPsychContribPluginPipe !== 'undefined'
-        });
-
         // Load trials
         const trialsData = await loadTrials();
         console.log('Loaded trials:', trialsData.length);
@@ -227,11 +217,13 @@ async function runExperiment() {
             ];
         } else {
             // Create full timeline with loaded trials
+            const experimentTrials = createTrials(trialsData);
+            
             timeline = [
                 consent,
                 instructions,
                 preload,
-                ...createTrials(trialsData),
+                ...experimentTrials,
                 save_data
             ];
         }
@@ -252,14 +244,5 @@ async function runExperiment() {
     }
 }
 
-// Debug the available global objects
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Available global objects:', Object.keys(window).filter(key => key.startsWith('jsPsych')));
-    
-    // Look for plugin objects specifically
-    const pluginNames = Object.keys(window).filter(key => key.includes('Plugin'));
-    console.log('Plugin objects:', pluginNames);
-    
-    // Run the experiment
-    runExperiment();
-});
+// Wait for the page to load before starting the experiment
+document.addEventListener('DOMContentLoaded', runExperiment);
