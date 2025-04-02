@@ -1,52 +1,17 @@
 // Generate participant ID at the start
 let participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
 
-var jsPsych = initJsPsych();
+// Initialize jsPsych correctly
+const jsPsych = initJsPsych({
+  show_progress_bar: true,
+  auto_update_progress_bar: false
+});
 
-var filename = jsPsych.randomization.randomID(10) + ".csv";
-var timeline = [];
-    
-    //var preload = {
-        //type: jsPsychPreload,
-        //video: ['stimuli/norming/batent1.mp4'],
-    //};
-    //timeline.push(preload);
+// Create a random filename for data saving
+const filename = jsPsych.randomization.randomID(10) + ".csv";
+let timeline = [];
 
-
-var instructions = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: `
-        <p>In this experiment, you will see a video and will be asked to describe what is happening</p>
-        <p>Press any key to begin.</p>
-        `,
-    };
-
-    // trials = generate_trials.py //array of random order from generate_trials
-    /** for (let i =0; i < trials.length; i++) {
-        var trial = {
-            type: jsPsychVideoKeyboardResponse,
-            stimulus: [trails[i]],
-            choices: ['enter'],
-            prompt: "<p>Describe what you see in the video.</p>",
-        };
-        timeline.push(trial);
-    }
-        */
-
-    // working example
-var trial = {
-    type: jsPsychVideoKeyboardResponse,
-    stimulus: ['stimuli/norming/batent1.mp4'],
-    choices: ['enter'],
-    prompt: "<p>Describe what you see in the video.</p>",
-    height: 480,
-    width: 480,
-    data: {
-        video_id: 'batent1',
-    }
-
-};
-
+// Define the consent form
 const consent = {
     type: jsPsychHtmlButtonResponse,
     stimulus: `
@@ -81,11 +46,59 @@ const consent = {
     }
 };
 
-// Function to load trials
+// Instructions block
+const instructions = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: `
+        <p>In this experiment, you will see a video and will be asked to describe what is happening</p>
+        <p>Press any key to begin.</p>
+    `,
+};
+
+// Example video trial
+const sampleVideoTrial = {
+    type: jsPsychVideoKeyboardResponse,
+    stimulus: ['stimuli/norming/batent1.mp4'],
+    choices: ['Enter'],
+    prompt: "<p>Press Enter after you've watched the video.</p>",
+    height: 480,
+    width: 480,
+    data: {
+        video_id: 'batent1',
+        subCode: participant_id
+    },
+    on_finish: function(data) {
+        data.rt = Math.round(data.rt);
+    }
+};
+
+// Text response after video
+const responseTextTrial = {
+    type: jsPsychSurveyText,
+    questions: [
+        {
+            prompt: 'Please describe what you saw in the video:', 
+            required: true,
+            rows: 5,
+            columns: 60
+        }
+    ],
+    data: {
+        trial_type: 'response',
+        video_id: 'batent1',
+        subCode: participant_id
+    }
+};
+
+// Function to get video path from filename
+function getVideoPath(stimName) {
+    return `stimuli/norming/${stimName}.mp4`;
+}
+
+// Function to load trials from CSV
 async function loadTrials() {
     try {
-        // Determine which file to load
-        let filename = 'trials.csv'; // default file
+        const filename = 'trials.csv'; // Path to your trials file
         
         const response = await fetch(filename);
         const csvText = await response.text();
@@ -96,15 +109,10 @@ async function loadTrials() {
             dynamicTyping: true
         });
 
-        // Log the first trial to check structure
         console.log('Sample trial structure:', results.data[0]);
 
         // Shuffle the trials
-        let shuffledData = [...results.data];
-        for (let i = shuffledData.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffledData[i], shuffledData[j]] = [shuffledData[j], shuffledData[i]];
-        }
+        let shuffledData = jsPsych.randomization.shuffle([...results.data]);
         
         // Update trial numbers to match new order
         shuffledData = shuffledData.map((trial, index) => ({
@@ -118,53 +126,78 @@ async function loadTrials() {
         return [];
     }
 }
+
+// Function to create trials based on loaded data
+function createTrials(trialsData) {
+    const experimentTrials = [];
     
+    trialsData.forEach(trial => {
+        // Skip if no filename is provided
+        if (!trial.filename) {
+            console.warn('Trial missing filename:', trial);
+            return;
+        }
+
+        // Create video trial
+        const videoTrial = {
+            type: jsPsychVideoKeyboardResponse,
+            stimulus: [getVideoPath(trial.filename)],
+            choices: ['Enter'],
+            prompt: "<p>Press Enter after you've watched the video.</p>",
+            height: 480,
+            width: 480,
+            data: {
+                video_id: trial.filename,
+                trial_num: trial.trial_num,
+                subCode: participant_id
+            },
+            on_finish: function(data) {
+                data.rt = Math.round(data.rt);
+                data.trial_part = 'video_viewing';
+            }
+        };
+        
+        // Create response trial
+        const responseTrial = {
+            type: jsPsychSurveyText,
+            questions: [
+                {
+                    prompt: 'Please describe what you saw in the video:', 
+                    required: true,
+                    rows: 5,
+                    columns: 60
+                }
+            ],
+            data: {
+                trial_type: 'response',
+                video_id: trial.filename,
+                trial_num: trial.trial_num,
+                subCode: participant_id
+            }
+        };
+
+        experimentTrials.push(videoTrial, responseTrial);
+    });
+    
+    return experimentTrials;
+}
+
+// Data saving configuration
 const save_data = {
     type: jsPsychPipe,
     action: "save",
     experiment_id: "DvojIUx5ETI3",
     filename: filename,
-    data_string: ()=>jsPsych.data.get().csv()
+    data_string: () => jsPsych.data.get().csv()
 };
 
-function getVideoPath(stimName) {
-    return `stimuli/norming/${stimName}.mp4`;
-}
+// Preload media files
+const preload = {
+    type: jsPsychPreload,
+    auto_preload: true
+};
 
-// Function to create trials
-function createTrials(trialsData) {
-    let allTrials = [];
-    
-    trialsData.forEach(trial => {
-
-        // Second part: Show both top stimulus and shuffled choice buttons
-        const responseTrial = {
-            type: jsPsychVideoKeyboardResponse,
-            stimulus: getVideoPath(trial.filename),
-            stimulus_height: 200,
-            maintain_aspect_ratio: true,
-            choices: choiceStims.map(stim => {
-                const videoPath = getImagePath(stim.stim);
-                console.log('Loading choice stimulus:', videoPath);
-                return '<img src="' + videoPath + '" style="max-width:200px; max-height:200px;">';
-            }),
-            response_ends_trial: true,
-            post_trial_gap: 500,
-            data: {
-                subCode: participant_id
-            },
-            on_finish: function(data) {
-                data.rt = Math.round(data.rt);
-                data.trial_part = 'critical_trial';
-            }
-        };
-
-        allTrials.push(topStimTrial, choiceTrial);
-    });
-    
-    return allTrials;
-}
-
+// Main function to run the experiment
 async function runExperiment() {
     try {
         // Load trials
@@ -172,27 +205,42 @@ async function runExperiment() {
         console.log('Loaded trials:', trialsData.length);
         
         if (trialsData.length === 0) {
-            console.error('No trials loaded!');
-            return;
+            // If no trials loaded, just use the sample trial
+            console.log('No trials loaded from CSV. Using sample trial instead.');
+            timeline = [
+                consent,
+                instructions,
+                preload,
+                sampleVideoTrial,
+                responseTextTrial,
+                save_data
+            ];
+        } else {
+            // Create full timeline with loaded trials
+            timeline = [
+                consent,
+                instructions,
+                preload,
+                ...createTrials(trialsData),
+                save_data
+            ];
         }
 
-        // Create timeline
-        const timeline = [
-            consent,
-            instructions,
-            ...createTrials(trialsData),
-            save_data
-        ];
-
         // Run the experiment
-        await jsPsych.run(timeline);
+        jsPsych.run(timeline);
     } catch (error) {
         console.error('Error running experiment:', error);
+        // Fallback to minimal experiment if there's an error
+        timeline = [
+            consent,
+            instructions,
+            sampleVideoTrial,
+            responseTextTrial,
+            save_data
+        ];
+        jsPsych.run(timeline);
     }
 }
 
-      
-
-
-// Start the experiment when the page loads
-runExperiment();
+// Wait for the page to load before starting the experiment
+document.addEventListener('DOMContentLoaded', runExperiment);
