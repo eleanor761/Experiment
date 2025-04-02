@@ -13,7 +13,7 @@ let timeline = [];
 
 // Define the consent form
 const consent = {
-    type: jsPsychPluginHtmlButtonResponse,
+    type: jsPsychHtmlButtonResponse,
     stimulus: `
         <div style="width: 800px; margin: 0 auto; text-align: left">
             <h3>Consent to Participate in Research</h3>
@@ -48,7 +48,7 @@ const consent = {
 
 // Instructions block
 const instructions = {
-    type: jsPsychPluginHtmlKeyboardResponse,
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: `
         <p>In this experiment, you will see a video and will be asked to describe what is happening</p>
         <p>Press any key to begin.</p>
@@ -57,7 +57,7 @@ const instructions = {
 
 // Example video trial
 const sampleVideoTrial = {
-    type: jsPsychPluginVideoKeyboardResponse,
+    type: jsPsychVideoKeyboardResponse,
     stimulus: ['stimuli/norming/batent1.mp4'],
     choices: ['Enter'],
     prompt: "<p>Press Enter after you've watched the video.</p>",
@@ -74,7 +74,7 @@ const sampleVideoTrial = {
 
 // Text response after video
 const responseTextTrial = {
-    type: jsPsychPluginSurveyText,
+    type: jsPsychSurveyText,
     questions: [
         {
             prompt: 'Please describe what you saw in the video:', 
