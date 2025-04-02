@@ -75,27 +75,31 @@ const responseTextTrial = {
 
 // Function to get video path from filename
 function getVideoPath(stimName) {
-    return `stimuli/norming/${stimName}.mp4`;
+    return `stimuli/norming/${stimName}`;
 }
 
 function createTrials(trialsData) {
     const experimentTrials = [];
     
     trialsData.forEach(trial => {
-        if (!trial.filename) {
-            console.warn('Trial missing filename:', trial);
+        // Try different possible field names for the filename
+        const videoFile = trial.filename || trial.file_name || trial.video || trial.stimuli;
+        
+        if (!videoFile) {
+            console.warn('Trial missing filename field:', trial);
             return;
         }
-
+        
         // Create combined video and text response trial
         const combinedTrial = {
-            type: jsPsychHtmlButtonResponse,
+            type: jsPsychPluginHtmlButtonResponse,
             stimulus: function() {
-                const videoPath = getVideoPath(trial.filename);
+                const videoPath = getVideoPath(videoFile);
                 return `
                     <div style="display: flex; flex-direction: column; align-items: center;">
-                        <video id="jspsych-video" height="480" width="auto" autoplay loop>
+                        <video id="jspsych-video" width="640" height="480" controls autoplay loop>
                             <source src="${videoPath}" type="video/mp4">
+                            Your browser does not support the video tag.
                         </video>
                         <div style="margin-top: 20px; width: 80%;">
                             <p><strong>Please describe what you see in the video:</strong></p>
@@ -106,8 +110,9 @@ function createTrials(trialsData) {
             },
             choices: ['Submit'],
             data: {
-                video_id: trial.filename,
+                video_id: videoFile,
                 trial_num: trial.trial_num,
+                type: trial.type || 'unknown',
                 subCode: participant_id,
                 trial_type: 'video_with_response'
             },
@@ -123,6 +128,7 @@ function createTrials(trialsData) {
     
     return experimentTrials;
 }
+
 
 // Preload media files
 const preload = {
