@@ -9,7 +9,7 @@ var jsPsych = initJsPsych();
         type: jsPsychPreload,
         video: ['stimuli/norming/batent1.mp4'],
     };
-    timeline.push(preload);
+    //timeline.push(preload);
 
     var welcome = {
         type: jsPsychHtmlKeyboardResponse,
@@ -51,7 +51,7 @@ var jsPsych = initJsPsych();
         }
 
     };
-    timeline.push(trial);
+    //timeline.push(trial);
 
     var end = {
       type: jsPsychHtmlKeyboardResponse,
