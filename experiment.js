@@ -1,7 +1,7 @@
 // Generate participant ID at the start
 let participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
 
-// Initialize jsPsych - note that we're using jsPsych instead of initJsPsych
+// Initialize jsPsych
 const jsPsych = new jsPsychModule.JsPsych({
   show_progress_bar: true,
   auto_update_progress_bar: false
@@ -13,7 +13,7 @@ let timeline = [];
 
 // Define the consent form
 const consent = {
-    type: jsPsychHtmlButtonResponse,
+    type: jsPsychPluginHtmlButtonResponse,
     stimulus: `
         <div style="width: 800px; margin: 0 auto; text-align: left">
             <h3>Consent to Participate in Research</h3>
@@ -48,7 +48,7 @@ const consent = {
 
 // Instructions block
 const instructions = {
-    type: jsPsychHtmlKeyboardResponse,
+    type: jsPsychPluginHtmlKeyboardResponse,
     stimulus: `
         <p>In this experiment, you will see a video and will be asked to describe what is happening</p>
         <p>Press any key to begin.</p>
@@ -57,7 +57,7 @@ const instructions = {
 
 // Example video trial
 const sampleVideoTrial = {
-    type: jsPsychVideoKeyboardResponse,
+    type: jsPsychPluginVideoKeyboardResponse,
     stimulus: ['stimuli/norming/batent1.mp4'],
     choices: ['Enter'],
     prompt: "<p>Press Enter after you've watched the video.</p>",
@@ -74,7 +74,7 @@ const sampleVideoTrial = {
 
 // Text response after video
 const responseTextTrial = {
-    type: jsPsychSurveyText,
+    type: jsPsychPluginSurveyText,
     questions: [
         {
             prompt: 'Please describe what you saw in the video:', 
@@ -140,7 +140,7 @@ function createTrials(trialsData) {
 
         // Create video trial
         const videoTrial = {
-            type: jsPsychVideoKeyboardResponse,
+            type: jsPsychPluginVideoKeyboardResponse,
             stimulus: [getVideoPath(trial.filename)],
             choices: ['Enter'],
             prompt: "<p>Press Enter after you've watched the video.</p>",
@@ -159,7 +159,7 @@ function createTrials(trialsData) {
         
         // Create response trial
         const responseTrial = {
-            type: jsPsychSurveyText,
+            type: jsPsychPluginSurveyText,
             questions: [
                 {
                     prompt: 'Please describe what you saw in the video:', 
@@ -184,7 +184,7 @@ function createTrials(trialsData) {
 
 // Data saving configuration
 const save_data = {
-    type: jsPsychPipe,
+    type: jsPsychContribPluginPipe,
     action: "save",
     experiment_id: "DvojIUx5ETI3",
     filename: filename,
@@ -193,13 +193,23 @@ const save_data = {
 
 // Preload media files
 const preload = {
-    type: jsPsychPreload,
+    type: jsPsychPluginPreload,
     auto_preload: true
 };
 
 // Main function to run the experiment
 async function runExperiment() {
     try {
+        // First, check if we have all needed plugins
+        console.log("Available plugins:", {
+            "HTML Button Response": typeof jsPsychPluginHtmlButtonResponse !== 'undefined',
+            "HTML Keyboard Response": typeof jsPsychPluginHtmlKeyboardResponse !== 'undefined',
+            "Video Keyboard Response": typeof jsPsychPluginVideoKeyboardResponse !== 'undefined',
+            "Survey Text": typeof jsPsychPluginSurveyText !== 'undefined',
+            "Preload": typeof jsPsychPluginPreload !== 'undefined',
+            "Pipe": typeof jsPsychContribPluginPipe !== 'undefined'
+        });
+
         // Load trials
         const trialsData = await loadTrials();
         console.log('Loaded trials:', trialsData.length);
@@ -230,25 +240,26 @@ async function runExperiment() {
         jsPsych.run(timeline);
     } catch (error) {
         console.error('Error running experiment:', error);
-        // Fallback to minimal experiment if there's an error
-        timeline = [
-            consent,
-            instructions,
-            sampleVideoTrial,
-            responseTextTrial,
-            save_data
-        ];
-        jsPsych.run(timeline);
+        // Display error message on the page
+        document.getElementById('jspsych-target').innerHTML = `
+            <div style="max-width: 800px; margin: 50px auto; padding: 20px; background: #f8f8f8; border-radius: 5px;">
+                <h2>Error Starting Experiment</h2>
+                <p>There was a problem starting the experiment. Please try refreshing the page.</p>
+                <p>If the problem persists, please contact the researcher.</p>
+                <p>Technical details: ${error.message}</p>
+            </div>
+        `;
     }
 }
 
-// Wait for the page to load before starting the experiment
-document.addEventListener('DOMContentLoaded', runExperiment);
-
-// In case we need to debug plugin loading
+// Debug the available global objects
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Available jsPsych modules:', Object.keys(window));
-    console.log('jsPsych module:', jsPsychModule);
-    console.log('HTML Button Response:', jsPsychHtmlButtonResponse);
-    console.log('Video Keyboard Response:', jsPsychVideoKeyboardResponse);
+    console.log('Available global objects:', Object.keys(window).filter(key => key.startsWith('jsPsych')));
+    
+    // Look for plugin objects specifically
+    const pluginNames = Object.keys(window).filter(key => key.includes('Plugin'));
+    console.log('Plugin objects:', pluginNames);
+    
+    // Run the experiment
+    runExperiment();
 });
