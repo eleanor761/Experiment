@@ -184,7 +184,7 @@ function createTrials(trialsData) {
 
 // Data saving configuration
 const save_data = {
-    type: jsPsychContribPluginPipe,
+    type: jsPsychContribPipe,
     action: "save",
     experiment_id: "DvojIUx5ETI3",
     filename: filename,
