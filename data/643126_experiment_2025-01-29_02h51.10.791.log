@@ -1,0 +1,80 @@
+5.8131 	DEBUG 	Fullscreen settings ignored as running in pilot mode.
+5.8139 	INFO 	Loaded monitor calibration from ['2025_01_27 21:32']
+6.0995 	EXP 	Created window1 = Window(allowGUI=False, allowStencil=False, autoLog=True, backendConf=UNKNOWN, backgroundFit=<method-wrapper '__getattribute__' of attributeSetter object at 0x0000021B37953EE0>, backgroundImage=<method-wrapper '__getattribute__' of attributeSetter object at 0x0000021B37953E80>, bitsMode=UNKNOWN, blendMode='avg', bpc=(8, 8, 8), color=array([0, 0, 0]), colorSpace='rgb', depthBits=8, fullscr=False, gamma=None, gammaErrorPolicy='raise', infoMsg=UNKNOWN, lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor object at 0x0000021B428ED120>, multiSample=False, name='window1', numSamples=2, pos=[560.0, 300.0], screen=0, size=array([800, 600]), stencilBits=0, stereo=False, title='PsychoPy', units='height', useFBO=True, useRetina=False, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+6.0995 	EXP 	window1: backgroundImage = ''
+6.0995 	EXP 	window1: backgroundFit = 'none'
+6.1095 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1101 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1112 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1120 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1128 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1134 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1141 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1149 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1151 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1154 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1160 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1166 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1171 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1179 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1184 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1193 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1200 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1205 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1209 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1216 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1221 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1224 	DEBUG 	Uploading Texture Font fontname to graphics card
+6.1335 	DEBUG 	Upload of Texture Font fontname complete
+6.1399 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1407 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1415 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1417 	DEBUG 	Uploading Texture Font fontname to graphics card
+6.1452 	DEBUG 	Upload of Texture Font fontname complete
+6.1469 	EXP 	window1: Attempting to measure frame rate of screen (0) ...
+6.1469 	EXP 	window1: recordFrameIntervals = False
+6.3215 	EXP 	window1: recordFrameIntervals = True
+6.5049 	EXP 	Screen (0) actual frame rate measured at 60.04Hz
+6.5049 	EXP 	window1: recordFrameIntervals = False
+6.5138 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.5145 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.5153 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.5163 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.5171 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.5179 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.5183 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.5191 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.5199 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.5205 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.5208 	DEBUG 	Uploading Texture Font fontname to graphics card
+6.5212 	DEBUG 	Upload of Texture Font fontname complete
+6.5320 	WARNING 	launchHubServer: If using the iohub mouse or eyetracker devices, fullScr should be True.
+9.5354 	INFO 	keyboard.Keyboard is using iohub backend.
+9.5355 	INFO 	keyboard.Keyboard is using iohub backend.
+9.5355 	INFO 	keyboard.Keyboard is using iohub backend.
+9.7484 	EXP 	experiment: status = STARTED
+9.8894 	EXP 	Created learningInstructions = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='learningInstructions', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+9.8914 	EXP 	Created text_left = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='text_left', opacity=1, ori=0.0, pos=array([-0.25,  0.  ]), rgb=UNKNOWN, text="'dog'", units='height', win=Window(...), wrapWidth=1)
+10.0421 	EXP 	Created image = ImageStim(__class__=<class 'psychopy.visual.image.ImageStim'>, anchor=('center', 'center'), autoLog=True, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-3.0, draggable=False, flipHoriz=False, flipVert=False, image='test_stimuli/dog_img.jpg', interpolate=True, mask=None, maskParams=None, name='image', opacity=1, ori=0.0, pos=array([-0.25,  0.  ]), size=array([0.25, 0.25]), texRes=128.0, units='height', win=Window(...))
+10.3233 	EXP 	Sound correct set volume 1.000
+10.3276 	EXP 	Created text_right = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-5.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='text_right', opacity=1, ori=0.0, pos=array([0.25, 0.  ]), rgb=UNKNOWN, text="'cat'", units='height', win=Window(...), wrapWidth=1)
+0.0080 	EXP 	movie: autoLog = True
+0.0261 	INFO 	Keyboard events cleared
+0.0256 	EXP 	learningInstructions: autoDraw = True
+0.7272 	DATA 	Keypress: s
+0.7421 	EXP 	learningInstructions: autoDraw = False
+0.7421 	EXP 	text_left: autoDraw = True
+0.7421 	EXP 	movie: autoDraw = True
+0.7421 	EXP 	text_right: autoDraw = True
+8.0420 	INFO 	Keyboard events cleared
+8.0415 	EXP 	movie: autoDraw = False
+8.0415 	EXP 	image: autoDraw = True
+10.1259 	DATA 	Keypress: z
+10.1440 	EXP 	text_left: autoDraw = False
+10.1440 	EXP 	movie: autoDraw = False
+10.1440 	EXP 	image: autoDraw = False
+10.1440 	EXP 	text_right: autoDraw = False
+10.1483 	EXP 	experiment: status = STOPPED
+10.1789 	INFO 	saved data to 'C:\\Users\\flani\\Experiment\\data/643126_experiment_2025-01-29_02h51.10.791.csv'
+10.1799 	INFO 	saved data to C:\Users\flani\Experiment\data/643126_experiment_2025-01-29_02h51.10.791.psydat
+10.9525 	DEBUG 	Saving data for experiment ExperimentHandler

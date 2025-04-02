@@ -1,0 +1,50 @@
+8.8158 	INFO 	Loaded monitor calibration from ['2025_01_27 21:32']
+8.8271 	WARNING 	User requested fullscreen with size [1024  768], but screen is actually [1920, 1200]. Using actual size
+9.7175 	EXP 	Created window1 = Window(allowGUI=False, allowStencil=False, autoLog=True, backendConf=UNKNOWN, backgroundFit=<method-wrapper '__getattribute__' of attributeSetter object at 0x00000204E315E1A0>, backgroundImage=<method-wrapper '__getattribute__' of attributeSetter object at 0x00000204E315E890>, bitsMode=UNKNOWN, blendMode='avg', bpc=(8, 8, 8), color=array([0, 0, 0]), colorSpace='rgb', depthBits=8, fullscr=True, gamma=None, gammaErrorPolicy='raise', infoMsg=UNKNOWN, lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor object at 0x00000204ECD81870>, multiSample=False, name='window1', numSamples=2, pos=[0.0, 0.0], screen=0, size=array([1920, 1200]), stencilBits=0, stereo=False, title='PsychoPy', units='height', useFBO=True, useRetina=False, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+9.7176 	EXP 	window1: backgroundImage = ''
+9.7176 	EXP 	window1: backgroundFit = 'none'
+9.8765 	EXP 	window1: Attempting to measure frame rate of screen (0) ...
+9.8765 	EXP 	window1: recordFrameIntervals = False
+10.0292 	EXP 	window1: recordFrameIntervals = True
+10.2132 	EXP 	Screen (0) actual frame rate measured at 59.92Hz
+10.2132 	EXP 	window1: recordFrameIntervals = False
+14.1292 	INFO 	keyboard.Keyboard is using iohub backend.
+14.1294 	INFO 	keyboard.Keyboard is using iohub backend.
+14.1294 	INFO 	keyboard.Keyboard is using iohub backend.
+14.3428 	INFO 	keyboard.Keyboard is using iohub backend.
+14.3428 	INFO 	keyboard.Keyboard is using iohub backend.
+14.3429 	EXP 	experiment: status = STARTED
+14.7438 	EXP 	Created learningInstructions = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='learningInstructions', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+15.9407 	EXP 	Created image = ImageStim(__class__=<class 'psychopy.visual.image.ImageStim'>, anchor=('center', 'center'), autoLog=True, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-1.0, draggable=False, flipHoriz=False, flipVert=False, image='test_stimuli/dog_img.jpg', interpolate=True, mask=None, maskParams=None, name='image', opacity=1, ori=0.0, pos=array([0.  , 0.25]), size=array([0.25, 0.25]), texRes=128.0, units='height', win=Window(...))
+15.9444 	EXP 	Created text_left = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-2.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='text_left', opacity=1, ori=0.0, pos=array([-0.25,  0.  ]), rgb=UNKNOWN, text="'dog'", units='height', win=Window(...), wrapWidth=1)
+15.9481 	EXP 	Created text_right = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-3.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='text_right', opacity=1, ori=0.0, pos=array([0.25, 0.  ]), rgb=UNKNOWN, text="'cat'", units='height', win=Window(...), wrapWidth=1)
+16.1424 	EXP 	Sound correct set volume 1.000
+16.1633 	EXP 	Created text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+16.3579 	EXP 	Created test_image = ImageStim(__class__=<class 'psychopy.visual.image.ImageStim'>, anchor=('center', 'center'), autoLog=True, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-1.0, draggable=False, flipHoriz=False, flipVert=False, image='test_stimuli/cat_img.jpg', interpolate=True, mask=None, maskParams=None, name='test_image', opacity=1, ori=0.0, pos=array([0.  , 0.25]), size=array([0.25, 0.25]), texRes=128.0, units='height', win=Window(...))
+16.3603 	EXP 	Created left_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-2.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='left_text', opacity=1, ori=0.0, pos=array([-0.25,  0.  ]), rgb=UNKNOWN, text="'dog'", units='height', win=Window(...), wrapWidth=1)
+16.3625 	EXP 	Created right_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-3.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='right_text', opacity=1, ori=0.0, pos=array([0.25, 0.  ]), rgb=UNKNOWN, text="'cat'", units='height', win=Window(...), wrapWidth=1)
+16.3687 	EXP 	Created thanks = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='thanks', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text='Thank you for participating!\n\nAdd Survey', units='height', win=Window(...), wrapWidth=1)
+0.0015 	EXP 	movie: autoLog = True
+0.0015 	EXP 	test_movie: autoLog = True
+0.0040 	INFO 	Keyboard events cleared
+0.0037 	EXP 	learningInstructions: autoDraw = True
+14.8683 	DATA 	Keypress: s
+14.8708 	EXP 	learningInstructions: autoDraw = False
+14.8708 	EXP 	movie: autoDraw = True
+14.8708 	EXP 	text_left: autoDraw = True
+14.8708 	EXP 	text_right: autoDraw = True
+20.0292 	INFO 	Keyboard events cleared
+20.0287 	EXP 	movie: autoDraw = False
+20.0287 	EXP 	image: autoDraw = True
+22.2469 	DATA 	Keypress: z
+23.4974 	DATA 	Keypress: z
+24.3639 	DATA 	Keypress: z
+25.1632 	DATA 	Keypress: slash
+25.9805 	DATA 	Keypress: escape
+26.0620 	EXP 	experiment: status = STOPPED
+26.0768 	EXP 	image: autoDraw = False
+26.0768 	EXP 	text_left: autoDraw = False
+26.0768 	EXP 	text_right: autoDraw = False
+26.0770 	EXP 	experiment: status = STOPPED
+26.0819 	INFO 	saved data to 'C:\\Users\\flani\\Experiment\\data/896201_experiment_2025-01-31_07h44.17.380.csv'
+26.0828 	INFO 	saved data to C:\Users\flani\Experiment\data/896201_experiment_2025-01-31_07h44.17.380.psydat

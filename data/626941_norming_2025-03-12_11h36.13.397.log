@@ -1,0 +1,86 @@
+4.9264 	DEBUG 	Fullscreen settings ignored as running in pilot mode.
+4.9273 	INFO 	Loaded monitor calibration from ['2025_01_27 21:32']
+5.1855 	EXP 	Created window1 = Window(allowGUI=False, allowStencil=True, autoLog=True, backendConf=UNKNOWN, backgroundFit=<method-wrapper '__getattribute__' of attributeSetter object at 0x000001E3ACB06020>, backgroundImage=<method-wrapper '__getattribute__' of attributeSetter object at 0x000001E3ACB05FC0>, bitsMode=UNKNOWN, blendMode='avg', bpc=(8, 8, 8), color=array([0, 0, 0]), colorSpace='rgb', depthBits=8, fullscr=False, gamma=None, gammaErrorPolicy='raise', infoMsg=UNKNOWN, lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor object at 0x000001E3ACB96710>, multiSample=False, name='window1', numSamples=2, pos=[560.0, 300.0], screen=0, size=array([800, 600]), stencilBits=8, stereo=False, title='PsychoPy', units='height', useFBO=True, useRetina=False, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+5.1856 	EXP 	window1: backgroundImage = ''
+5.1856 	EXP 	window1: backgroundFit = 'none'
+5.1929 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.1935 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.1941 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.1948 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.1956 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.1960 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.1965 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.1973 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.1975 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.1978 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.1984 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.1989 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.1994 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.2000 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.2005 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.2011 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.2017 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.2020 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.2024 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.2031 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.2035 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.2037 	DEBUG 	Uploading Texture Font fontname to graphics card
+5.2186 	DEBUG 	Upload of Texture Font fontname complete
+5.2242 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.2250 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.2258 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.2260 	DEBUG 	Uploading Texture Font fontname to graphics card
+5.2536 	DEBUG 	Upload of Texture Font fontname complete
+5.2552 	EXP 	window1: Attempting to measure frame rate of screen (0) ...
+5.2553 	EXP 	window1: recordFrameIntervals = False
+5.5215 	EXP 	window1: recordFrameIntervals = True
+5.7066 	EXP 	Screen (0) actual frame rate measured at 59.69Hz
+5.7067 	EXP 	window1: recordFrameIntervals = False
+5.7194 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7204 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7220 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7240 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7259 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7277 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7287 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7302 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7320 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7336 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7342 	DEBUG 	Uploading Texture Font fontname to graphics card
+5.7352 	DEBUG 	Upload of Texture Font fontname complete
+5.7513 	WARNING 	launchHubServer: If using the iohub mouse or eyetracker devices, fullScr should be True.
+8.3693 	INFO 	keyboard.Keyboard is using iohub backend.
+8.3693 	INFO 	keyboard.Keyboard is using iohub backend.
+8.3694 	EXP 	norming: status = STARTED
+8.6832 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+8.6846 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+8.6863 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+8.6874 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+8.6884 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+8.6897 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+8.6903 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+8.6917 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+8.6929 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+8.6936 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+8.6941 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+8.6949 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+8.6952 	DEBUG 	Uploading Texture Font fontname to graphics card
+8.6971 	DEBUG 	Upload of Texture Font fontname complete
+8.7026 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+8.7042 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+8.7047 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+8.7052 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+8.7055 	DEBUG 	Uploading Texture Font fontname to graphics card
+8.7240 	DEBUG 	Upload of Texture Font fontname complete
+0.0114 	EXP 	movie: autoLog = True
+0.0114 	EXP 	textbox: autoLog = True
+0.0786 	INFO 	Keyboard events cleared
+0.0781 	EXP 	movie: autoDraw = True
+0.0781 	EXP 	textbox: autoDraw = True
+9.8958 	EXP 	movie: autoDraw = False
+9.8958 	EXP 	movie: autoDraw = False
+9.8958 	EXP 	textbox: autoDraw = False
+9.8977 	EXP 	norming: status = STOPPED
+9.9275 	INFO 	saved data to 'C:\\Users\\flani\\Experiment\\data/626941_norming_2025-03-12_11h36.13.397.csv'
+9.9283 	INFO 	saved data to C:\Users\flani\Experiment\data/626941_norming_2025-03-12_11h36.13.397.psydat
+10.1368 	DEBUG 	Saving data for norming ExperimentHandler

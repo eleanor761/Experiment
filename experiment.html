@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My experiment</title>
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-video-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
+    <script src="jspsych/dist/plugin-video-shortanswer-response.js"></script>
+    <script src="jspsych/dist/plugin-survey-text copy.js"></script>
+    <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body></body>
+  <script>
+    var jsPsych = initJsPsych();
+    var timeline = [];
+
+    var preload = {
+        type: jsPsychPreload,
+        video: ['stimuli/batent1.mp4'],
+    };
+    timeline.push(preload);
+
+    var welcome = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: "Welcome to the experiment. Press any key to begin."
+    };
+    timeline.push(welcome);
+
+    var instructions = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: `
+            <p>In this experiment, you will see a video and will be asked to describe what is happening</p>
+            <p>Press any key to begin.</p>
+        `,
+    };
+    timeline.push(instructions);
+
+    var first_trial = {
+        type: jsPsychVideoText,
+        video: 'stimuli/norming/batent1.mp4',
+        placeholder: '<p>Describe what is happening in the video.</p>',
+        rows: 4,
+        columns: 8,
+
+
+
+
+
+    };
+    timeline.push(first_trial);
+
+    var end = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: "Thank you for participating! Press any key to finish."
+    }
+    timeline.push(end);
+
+    jsPsych.run(timeline);
+  </script>
+</html>

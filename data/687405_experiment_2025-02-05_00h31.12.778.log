@@ -1,0 +1,96 @@
+5.5533 	DEBUG 	Fullscreen settings ignored as running in pilot mode.
+5.5543 	INFO 	Loaded monitor calibration from ['2025_01_27 21:32']
+5.7491 	EXP 	Created window1 = Window(allowGUI=False, allowStencil=False, autoLog=True, backendConf=UNKNOWN, backgroundFit=<method-wrapper '__getattribute__' of attributeSetter object at 0x000001F32C38E4A0>, backgroundImage=<method-wrapper '__getattribute__' of attributeSetter object at 0x000001F32C38E440>, bitsMode=UNKNOWN, blendMode='avg', bpc=(8, 8, 8), color=array([0, 0, 0]), colorSpace='rgb', depthBits=8, fullscr=False, gamma=None, gammaErrorPolicy='raise', infoMsg=UNKNOWN, lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor object at 0x000001F32C44D780>, multiSample=False, name='window1', numSamples=2, pos=[560.0, 300.0], screen=0, size=array([800, 600]), stencilBits=0, stereo=False, title='PsychoPy', units='height', useFBO=True, useRetina=False, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+5.7491 	EXP 	window1: backgroundImage = ''
+5.7491 	EXP 	window1: backgroundFit = 'none'
+5.7554 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7561 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7567 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7575 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7583 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7587 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7593 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7601 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7604 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7607 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7613 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7618 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7624 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7629 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7634 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7640 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7647 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7650 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7655 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7663 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7667 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7670 	DEBUG 	Uploading Texture Font fontname to graphics card
+5.7710 	DEBUG 	Upload of Texture Font fontname complete
+5.7760 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7768 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7776 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.7778 	DEBUG 	Uploading Texture Font fontname to graphics card
+5.7841 	DEBUG 	Upload of Texture Font fontname complete
+5.7856 	EXP 	window1: Attempting to measure frame rate of screen (0) ...
+5.7856 	EXP 	window1: recordFrameIntervals = False
+5.9685 	EXP 	window1: recordFrameIntervals = True
+6.1515 	EXP 	Screen (0) actual frame rate measured at 60.31Hz
+6.1516 	EXP 	window1: recordFrameIntervals = False
+6.1618 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1631 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1641 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1651 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1661 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1671 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1676 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1685 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1694 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1703 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+6.1707 	DEBUG 	Uploading Texture Font fontname to graphics card
+6.1712 	DEBUG 	Upload of Texture Font fontname complete
+6.1866 	WARNING 	launchHubServer: If using the iohub mouse or eyetracker devices, fullScr should be True.
+8.6687 	INFO 	keyboard.Keyboard is using iohub backend.
+8.6687 	INFO 	keyboard.Keyboard is using iohub backend.
+8.6688 	INFO 	keyboard.Keyboard is using iohub backend.
+8.6688 	INFO 	keyboard.Keyboard is using iohub backend.
+8.6688 	EXP 	experiment: status = STARTED
+8.8859 	EXP 	Created left_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-1.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='left_text', opacity=1, ori=0.0, pos=array([-0.25,  0.  ]), rgb=UNKNOWN, text="'barbul'", units='height', win=Window(...), wrapWidth=1)
+8.8935 	EXP 	Created right_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-2.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='right_text', opacity=1, ori=0.0, pos=array([0.25, 0.  ]), rgb=UNKNOWN, text="'joicate'", units='height', win=Window(...), wrapWidth=1)
+9.0356 	EXP 	Created left_text_2 = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-1.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='left_text_2', opacity=1, ori=0.0, pos=array([-0.25,  0.  ]), rgb=UNKNOWN, text="'joicate'", units='height', win=Window(...), wrapWidth=1)
+9.0396 	EXP 	Created right_text_2 = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-2.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='right_text_2', opacity=1, ori=0.0, pos=array([0.25, 0.  ]), rgb=UNKNOWN, text="'fremple'", units='height', win=Window(...), wrapWidth=1)
+9.1807 	EXP 	Created left_text_3 = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-1.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='left_text_3', opacity=1, ori=0.0, pos=array([-0.25,  0.  ]), rgb=UNKNOWN, text="'pablize'", units='height', win=Window(...), wrapWidth=1)
+9.1831 	EXP 	Created right_text_3 = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-2.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='right_text_3', opacity=1, ori=0.0, pos=array([0.25, 0.  ]), rgb=UNKNOWN, text="'joicate'", units='height', win=Window(...), wrapWidth=1)
+9.1937 	EXP 	Created thanks = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, draggable=False, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='thanks', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text='Thank you for participating!\n\nAdd Survey', units='height', win=Window(...), wrapWidth=1)
+0.0049 	EXP 	test_movie: autoLog = True
+0.0049 	EXP 	test_movie_2: autoLog = True
+0.0049 	EXP 	test_movie_3: autoLog = True
+0.0560 	EXP 	test_movie: autoDraw = True
+0.0560 	EXP 	left_text: autoDraw = True
+0.0560 	EXP 	right_text: autoDraw = True
+5.0087 	INFO 	Keyboard events cleared
+9.2816 	DATA 	Keypress: slash
+9.2911 	EXP 	test_movie: autoDraw = False
+9.2911 	EXP 	left_text: autoDraw = False
+9.2911 	EXP 	right_text: autoDraw = False
+9.2911 	EXP 	test_movie_2: autoDraw = True
+9.2911 	EXP 	left_text_2: autoDraw = True
+9.2911 	EXP 	right_text_2: autoDraw = True
+14.2576 	INFO 	Keyboard events cleared
+15.2332 	DATA 	Keypress: z
+15.2391 	EXP 	test_movie_2: autoDraw = False
+15.2391 	EXP 	left_text_2: autoDraw = False
+15.2391 	EXP 	right_text_2: autoDraw = False
+15.2391 	EXP 	test_movie_3: autoDraw = True
+15.2391 	EXP 	left_text_3: autoDraw = True
+15.2391 	EXP 	right_text_3: autoDraw = True
+20.2248 	INFO 	Keyboard events cleared
+21.8872 	DATA 	Keypress: slash
+21.9063 	EXP 	test_movie_3: autoDraw = False
+21.9063 	EXP 	left_text_3: autoDraw = False
+21.9063 	EXP 	right_text_3: autoDraw = False
+21.9063 	EXP 	thanks: autoDraw = True
+22.9063 	EXP 	thanks: autoDraw = False
+22.9090 	EXP 	experiment: status = STOPPED
+22.9118 	INFO 	saved data to 'C:\\Users\\flani\\Experiment\\data/687405_experiment_2025-02-05_00h31.12.778.csv'
+22.9128 	INFO 	saved data to C:\Users\flani\Experiment\data/687405_experiment_2025-02-05_00h31.12.778.psydat
+23.4535 	DEBUG 	Saving data for experiment ExperimentHandler

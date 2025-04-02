@@ -1,0 +1,57 @@
+4.8174 	DEBUG 	Fullscreen settings ignored as running in pilot mode.
+4.8183 	INFO 	Loaded monitor calibration from ['2025_01_27 21:32']
+5.0580 	EXP 	Created window1 = Window(allowGUI=False, allowStencil=True, autoLog=True, backendConf=UNKNOWN, backgroundFit=<method-wrapper '__getattribute__' of attributeSetter object at 0x0000019A99CDF700>, backgroundImage=<method-wrapper '__getattribute__' of attributeSetter object at 0x0000019A99CDF760>, bitsMode=UNKNOWN, blendMode='avg', bpc=(8, 8, 8), color=array([0, 0, 0]), colorSpace='rgb', depthBits=8, fullscr=False, gamma=None, gammaErrorPolicy='raise', infoMsg=UNKNOWN, lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor object at 0x0000019A99D6CCD0>, multiSample=False, name='window1', numSamples=2, pos=[560.0, 300.0], screen=0, size=array([800, 600]), stencilBits=8, stereo=False, title='PsychoPy', units='height', useFBO=True, useRetina=False, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+5.0581 	EXP 	window1: backgroundImage = ''
+5.0581 	EXP 	window1: backgroundFit = 'none'
+5.0645 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0651 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0658 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0665 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0672 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0676 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0682 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0689 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0691 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0694 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0700 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0705 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0710 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0716 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0721 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0727 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0733 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0737 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0740 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0748 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0751 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0754 	DEBUG 	Uploading Texture Font fontname to graphics card
+5.0875 	DEBUG 	Upload of Texture Font fontname complete
+5.0926 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0935 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0943 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.0945 	DEBUG 	Uploading Texture Font fontname to graphics card
+5.1061 	DEBUG 	Upload of Texture Font fontname complete
+5.1075 	EXP 	window1: Attempting to measure frame rate of screen (0) ...
+5.1076 	EXP 	window1: recordFrameIntervals = False
+5.2833 	EXP 	window1: recordFrameIntervals = True
+5.4665 	EXP 	Screen (0) actual frame rate measured at 59.75Hz
+5.4666 	EXP 	window1: recordFrameIntervals = False
+5.4743 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.4751 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.4763 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.4774 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.4784 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.4792 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.4797 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.4804 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.4813 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.4821 	DEBUG 	TextBox2 loaded 1 chars with 0 blanks and 1 valid
+5.4823 	DEBUG 	Uploading Texture Font fontname to graphics card
+5.4828 	DEBUG 	Upload of Texture Font fontname complete
+5.4934 	WARNING 	launchHubServer: If using the iohub mouse or eyetracker devices, fullScr should be True.
+7.7798 	INFO 	keyboard.Keyboard is using iohub backend.
+7.7799 	INFO 	keyboard.Keyboard is using iohub backend.
+7.7799 	EXP 	norming: status = STARTED
+7.8377 	DEBUG 	Saving data for norming ExperimentHandler
+7.8383 	INFO 	saved data to C:\Users\flani\Experiment\data/111288_norming_2025-03-12_12h03.49.792.psydat
+7.8387 	INFO 	saved data to 'C:\\Users\\flani\\Experiment\\data/111288_norming_2025-03-12_12h03.49.792.csv'
