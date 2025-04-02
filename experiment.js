@@ -142,7 +142,7 @@ const save_data = {
 // Function to load trials from CSV
 async function loadTrials() {
     try {
-        const csvFilename = 'trials_demo.csv'; // Path to your trials file, will need to udpate once all videos are done
+        const csvFilename = 'demo_trials.csv'; // Path to your trials file, will need to udpate once all videos are done
         
         const response = await fetch(csvFilename);
         const csvText = await response.text();
