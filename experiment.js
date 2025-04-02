@@ -55,23 +55,6 @@ const instructions = {
     `,
 };
 
-// Example video trial
-const sampleVideoTrial = {
-    type: jsPsychVideoKeyboardResponse,  
-    stimulus: ['stimuli/norming/batent1.mp4'],
-    choices: ['Enter'],
-    prompt: "<p>Press Enter after you've watched the video.</p>",
-    height: 480,
-    width: 480,
-    data: {
-        video_id: 'batent1',
-        subCode: participant_id
-    },
-    on_finish: function(data) {
-        data.rt = Math.round(data.rt);
-    }
-};
-
 // Text response after video
 const responseTextTrial = {
     type: jsPsychSurveyText,
