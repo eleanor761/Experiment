@@ -89,7 +89,7 @@ function createTrials(trialsData) {
 
         // Create combined video and text response trial
         const combinedTrial = {
-            type: jsPsychPluginHtmlButtonResponse,
+            type: jsPsychHtmlButtonResponse,
             stimulus: function() {
                 const videoPath = getVideoPath(trial.filename);
                 return `
