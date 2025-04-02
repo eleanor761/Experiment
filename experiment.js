@@ -78,88 +78,47 @@ function getVideoPath(stimName) {
     return `stimuli/norming/${stimName}.mp4`;
 }
 
-// Function to load trials from CSV
-async function loadTrials() {
-    try {
-        const csvFilename = 'trials.csv'; // Path to your trials file
-        
-        const response = await fetch(csvFilename);
-        const csvText = await response.text();
-        
-        const results = Papa.parse(csvText, {
-            header: true,
-            skipEmptyLines: true,
-            dynamicTyping: true
-        });
-
-        console.log('Sample trial structure:', results.data[0]);
-
-        // Shuffle the trials
-        let shuffledData = jsPsych.randomization.shuffle([...results.data]);
-        
-        // Update trial numbers to match new order
-        shuffledData = shuffledData.map((trial, index) => ({
-            ...trial,
-            trial_num: index
-        }));
-        
-        return shuffledData;
-    } catch (error) {
-        console.error('Error loading trials:', error);
-        return [];
-    }
-}
-
-// Function to create trials based on loaded data
 function createTrials(trialsData) {
     const experimentTrials = [];
     
     trialsData.forEach(trial => {
-        // Check for filee since that's what the CSV uses
         if (!trial.filename) {
             console.warn('Trial missing filename:', trial);
             return;
         }
 
-        // Create video trial
-        const videoTrial = {
-            type: jsPsychVideoKeyboardResponse,
-            stimulus: [getVideoPath(trial.filename)],
-            choices: ['Enter'],
-            prompt: "<p>Press Enter after you've watched the video.</p>",
-            height: 480,
-            width: 480,
+        // Create combined video and text response trial
+        const combinedTrial = {
+            type: jsPsychPluginHtmlButtonResponse,
+            stimulus: function() {
+                const videoPath = getVideoPath(trial.filename);
+                return `
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <video id="jspsych-video" height="480" width="auto" autoplay loop>
+                            <source src="${videoPath}" type="video/mp4">
+                        </video>
+                        <div style="margin-top: 20px; width: 80%;">
+                            <p><strong>Please describe what you see in the video:</strong></p>
+                            <textarea id="response-text" rows="5" style="width: 100%; padding: 10px;"></textarea>
+                        </div>
+                    </div>
+                `;
+            },
+            choices: ['Submit'],
             data: {
                 video_id: trial.filename,
                 trial_num: trial.trial_num,
-                subCode: participant_id
+                subCode: participant_id,
+                trial_type: 'video_with_response'
             },
             on_finish: function(data) {
-                data.rt = Math.round(data.rt);
-                data.trial_part = 'video_viewing';
-            }
-        };
-        
-        // Create response trial
-        const responseTrial = {
-            type: jsPsychSurveyText,
-            questions: [
-                {
-                    prompt: 'Please describe what you saw in the video:', 
-                    required: true,
-                    rows: 5,
-                    columns: 60
-                }
-            ],
-            data: {
-                trial_type: 'response',
-                video_id: trial.filename,
-                trial_num: trial.trial_num,
-                subCode: participant_id
+                // Get the text response and save it
+                const responseText = document.getElementById('response-text').value;
+                data.response_text = responseText;
             }
         };
 
-        experimentTrials.push(videoTrial, responseTrial);
+        experimentTrials.push(combinedTrial);
     });
     
     return experimentTrials;
