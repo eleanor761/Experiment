@@ -139,6 +139,38 @@ const save_data = {
     data_string: () => jsPsych.data.get().csv()
 };
 
+// Function to load trials from CSV
+async function loadTrials() {
+    try {
+        const csvFilename = 'trials_demo.csv'; // Path to your trials file, will need to udpate once all videos are done
+        
+        const response = await fetch(csvFilename);
+        const csvText = await response.text();
+        
+        const results = Papa.parse(csvText, {
+            header: true,
+            skipEmptyLines: true,
+            dynamicTyping: true
+        });
+
+        console.log('Sample trial structure:', results.data[0]);
+
+        // Shuffle the trials
+        let shuffledData = jsPsych.randomization.shuffle([...results.data]);
+        
+        // Update trial numbers to match new order
+        shuffledData = shuffledData.map((trial, index) => ({
+            ...trial,
+            trial_num: index
+        }));
+        
+        return shuffledData;
+    } catch (error) {
+        console.error('Error loading trials:', error);
+        return [];
+    }
+}
+
 // Main function to run the experiment
 async function runExperiment() {
     try {
