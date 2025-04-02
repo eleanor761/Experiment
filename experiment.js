@@ -1,8 +1,8 @@
 // Generate participant ID at the start
 let participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
 
-// Initialize jsPsych correctly
-const jsPsych = initJsPsych({
+// Initialize jsPsych - note that we're using jsPsych instead of initJsPsych
+const jsPsych = new jsPsychModule.JsPsych({
   show_progress_bar: true,
   auto_update_progress_bar: false
 });
@@ -244,3 +244,11 @@ async function runExperiment() {
 
 // Wait for the page to load before starting the experiment
 document.addEventListener('DOMContentLoaded', runExperiment);
+
+// In case we need to debug plugin loading
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Available jsPsych modules:', Object.keys(window));
+    console.log('jsPsych module:', jsPsychModule);
+    console.log('HTML Button Response:', jsPsychHtmlButtonResponse);
+    console.log('Video Keyboard Response:', jsPsychVideoKeyboardResponse);
+});
