@@ -1,4 +1,4 @@
-trial_num,count,type,dimension,file_name,action
+trial_num,count,type,dimension,filename,action
 1,1,batent,initial,batent1.mp4,straighten frame
 2,2,batent,initial,batent2.mp4,straighten frame
 3,3,batent,initial,batent3.mp4,straighten frame
