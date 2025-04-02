@@ -11,9 +11,9 @@ const jsPsych = new jsPsychModule.JsPsych({
 const filename = jsPsych.randomization.randomID(10) + ".csv";
 let timeline = [];
 
-// Define the consent form with correct plugin name
+// Define the consent form 
 const consent = {
-    type: jsPsychPluginHtmlButtonResponse,  // This is the correct plugin name based on your logs
+    type: jsPsychPluginHtmlButtonResponse,  
     stimulus: `
         <div style="width: 800px; margin: 0 auto; text-align: left">
             <h3>Consent to Participate in Research</h3>
@@ -48,7 +48,7 @@ const consent = {
 
 // Instructions block
 const instructions = {
-    type: jsPsychPluginHtmlKeyboardResponse,  // Correct plugin name
+    type: jsPsychPluginHtmlKeyboardResponse,  
     stimulus: `
         <p>In this experiment, you will see a video and will be asked to describe what is happening</p>
         <p>Press any key to begin.</p>
@@ -57,7 +57,7 @@ const instructions = {
 
 // Example video trial
 const sampleVideoTrial = {
-    type: jsPsychPluginVideoKeyboardResponse,  // Correct plugin name
+    type: jsPsychPluginVideoKeyboardResponse,  
     stimulus: ['stimuli/norming/batent1.mp4'],
     choices: ['Enter'],
     prompt: "<p>Press Enter after you've watched the video.</p>",
@@ -74,7 +74,7 @@ const sampleVideoTrial = {
 
 // Text response after video
 const responseTextTrial = {
-    type: jsPsychPluginSurveyText,  // Correct plugin name
+    type: jsPsychPluginSurveyText,
     questions: [
         {
             prompt: 'Please describe what you saw in the video:', 
@@ -184,13 +184,13 @@ function createTrials(trialsData) {
 
 // Preload media files
 const preload = {
-    type: jsPsychPluginPreload,  // Correct plugin name
+    type: jsPsychPluginPreload, 
     auto_preload: true
 };
 
 // Data saving configuration
 const save_data = {
-    type: jsPsychContribPluginPipe,  // Correct plugin name for DataPipe
+    type: jsPsychPipe, 
     action: "save",
     experiment_id: "DvojIUx5ETI3",
     filename: filename,
