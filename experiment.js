@@ -132,22 +132,22 @@ function createTrials(trialsData) {
     const experimentTrials = [];
     
     trialsData.forEach(trial => {
-        // Check for file_name since that's what the CSV uses
-        if (!trial.file_name) {
-            console.warn('Trial missing file_name:', trial);
+        // Check for filee since that's what the CSV uses
+        if (!trial.filename) {
+            console.warn('Trial missing filename:', trial);
             return;
         }
 
         // Create video trial
         const videoTrial = {
             type: jsPsychVideoKeyboardResponse,
-            stimulus: [getVideoPath(trial.file_name)],
+            stimulus: [getVideoPath(trial.filename)],
             choices: ['Enter'],
             prompt: "<p>Press Enter after you've watched the video.</p>",
             height: 480,
             width: 480,
             data: {
-                video_id: trial.file_name,
+                video_id: trial.filename,
                 trial_num: trial.trial_num,
                 subCode: participant_id
             },
@@ -170,7 +170,7 @@ function createTrials(trialsData) {
             ],
             data: {
                 trial_type: 'response',
-                video_id: trial.file_name,
+                video_id: trial.filename,
                 trial_num: trial.trial_num,
                 subCode: participant_id
             }
@@ -204,29 +204,17 @@ async function runExperiment() {
         const trialsData = await loadTrials();
         console.log('Loaded trials:', trialsData.length);
         
-        if (trialsData.length === 0) {
-            // If no trials loaded, just use the sample trial
-            console.log('No trials loaded from CSV. Using sample trial instead.');
-            timeline = [
-                consent,
-                instructions,
-                preload,
-                sampleVideoTrial,
-                responseTextTrial,
-                save_data
-            ];
-        } else {
-            // Create full timeline with loaded trials
-            const experimentTrials = createTrials(trialsData);
+
+        // Create full timeline with loaded trials
+        const experimentTrials = createTrials(trialsData);
             
-            timeline = [
-                consent,
-                instructions,
-                preload,
-                ...experimentTrials,
-                save_data
+        timeline = [
+            consent,
+            instructions,
+            preload,
+            ...experimentTrials,
+            save_data
             ];
-        }
 
         // Run the experiment
         jsPsych.run(timeline);
