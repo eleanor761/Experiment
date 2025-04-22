@@ -55,24 +55,6 @@ const instructions = {
     `,
 };
 
-// Text response after video
-const responseTextTrial = {
-    type: jsPsychSurveyText,
-    questions: [
-        {
-            prompt: 'Please describe what you saw in the video:', 
-            required: true,
-            rows: 5,
-            columns: 60
-        }
-    ],
-    data: {
-        trial_type: 'response',
-        video_id: 'batent1',
-        subCode: participant_id
-    }
-};
-
 // Function to get video path from filename
 function getVideoPath(stimName) {
     return `stimuli/norming/${stimName}`;
@@ -90,45 +72,37 @@ function createTrials(trialsData) {
             return;
         }
         
-        // Create combined video and text response trial
-        const combinedTrial = {
-            type: jsPsychHtmlButtonResponse,
-            stimulus: function() {
-                const videoPath = getVideoPath(videoFile);
-                return `
-                    <div style="display: flex; flex-direction: column; align-items: center;">
-                        <video id="jspsych-video" width="640" height="480" controls autoplay loop>
-                            <source src="${videoPath}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                        <div style="margin-top: 20px; width: 80%;">
-                            <p><strong>Please describe what you see in the video:</strong></p>
-                            <textarea id="response-text" rows="5" style="width: 100%; padding: 10px;"></textarea>
-                        </div>
-                    </div>
-                `;
-            },
-            choices: ['Submit'],
+        // Create video text response trial using our new plugin
+        const videoResponseTrial = {
+            type: jsPsychVideoTextResponse,
+            stimulus: [getVideoPath(videoFile)],  // Wrapped in array as required by the plugin
+            width: 640,
+            height: 480,
+            controls: true,
+            autoplay: true,
+            loop: true,  // Match the original behavior which had loop enabled
+            prompt: `<p>Video ${trial.trial_num + 1}</p>`,
+            question_text: 'Please describe what you see in the video:',
+            placeholder: 'Type your response here...',
+            rows: 5,
+            columns: 60,
+            required: true,
+            show_response_during_video: true,
+            button_label: 'Submit',
             data: {
                 video_id: videoFile,
                 trial_num: trial.trial_num,
                 type: trial.type || 'unknown',
                 subCode: participant_id,
                 trial_type: 'video_with_response'
-            },
-            on_finish: function(data) {
-                // Get the text response and save it
-                const responseText = document.getElementById('response-text').value;
-                data.response_text = responseText;
             }
         };
 
-        experimentTrials.push(combinedTrial);
+        experimentTrials.push(videoResponseTrial);
     });
     
     return experimentTrials;
 }
-
 
 // Preload media files
 const preload = {
@@ -148,7 +122,7 @@ const save_data = {
 // Function to load trials from CSV
 async function loadTrials() {
     try {
-        const csvFilename = 'demo_trials.csv'; // Path to your trials file, will need to udpate once all videos are done
+        const csvFilename = 'demo_trials.csv'; // Path to your trials file, will need to update once all videos are done
         
         const response = await fetch(csvFilename);
         const csvText = await response.text();
@@ -184,7 +158,6 @@ async function runExperiment() {
         const trialsData = await loadTrials();
         console.log('Loaded trials:', trialsData.length);
         
-
         // Create full timeline with loaded trials
         const experimentTrials = createTrials(trialsData);
             
@@ -194,7 +167,7 @@ async function runExperiment() {
             preload,
             ...experimentTrials,
             save_data
-            ];
+        ];
 
         // Run the experiment
         jsPsych.run(timeline);

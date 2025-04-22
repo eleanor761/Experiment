@@ -1,0 +1,277 @@
+/**
+ * jspsych-video-text-response
+ * A jsPsych plugin for displaying a video stimulus and collecting a text response
+ * 
+ * @author Your Name
+ */
+var jsPsychVideoTextResponse = (function (jspsych) {
+  'use strict';
+
+  const info = {
+    name: 'video-text-response',
+    parameters: {
+      /** 
+       * The video file to play. Video can be provided in multiple file formats, 
+       * like in the jsPsych video plugin.
+       */
+      stimulus: {
+        type: jspsych.ParameterType.VIDEO,
+        pretty_name: 'Video',
+        default: undefined,
+        description: 'Video files to be played.'
+      },
+      /** Width of the video in pixels */
+      width: {
+        type: jspsych.ParameterType.INT,
+        pretty_name: 'Width',
+        default: 640,
+        description: 'The width of the video in pixels.'
+      },
+      /** Height of the video in pixels */
+      height: {
+        type: jspsych.ParameterType.INT,
+        pretty_name: 'Height',
+        default: 360,
+        description: 'The height of the video in pixels.'
+      },
+      /** Whether to autoplay the video */
+      autoplay: {
+        type: jspsych.ParameterType.BOOL,
+        pretty_name: 'Autoplay',
+        default: true,
+        description: 'If true, the video will autoplay.'
+      },
+      /** Whether to loop the video */
+      loop: {
+        type: jspsych.ParameterType.BOOL,
+        pretty_name: 'Loop',
+        default: false,
+        description: 'If true, the video will loop.'
+      },
+      /** Whether to show video controls */
+      controls: {
+        type: jspsych.ParameterType.BOOL,
+        pretty_name: 'Controls',
+        default: false,
+        description: 'If true, video controls will be available.'
+      },
+      /** Prompt to display above the video */
+      prompt: {
+        type: jspsych.ParameterType.HTML_STRING,
+        pretty_name: 'Prompt',
+        default: null,
+        description: 'Any content here will be displayed above the video.'
+      },
+      /** Label to display for the text input */
+      question_text: {
+        type: jspsych.ParameterType.HTML_STRING,
+        pretty_name: 'Question Text',
+        default: 'Please provide your response:',
+        description: 'Text to display above the text input.'
+      },
+      /** Placeholder text for the response text box */
+      placeholder: {
+        type: jspsych.ParameterType.STRING,
+        pretty_name: 'Placeholder',
+        default: '',
+        description: 'Placeholder text for the text box.'
+      },
+      /** The number of rows for the response text box */
+      rows: {
+        type: jspsych.ParameterType.INT,
+        pretty_name: 'Rows',
+        default: 5,
+        description: 'The number of rows for the response text box.'
+      },
+      /** The number of columns for the response text box */
+      columns: {
+        type: jspsych.ParameterType.INT,
+        pretty_name: 'Columns',
+        default: 40,
+        description: 'The number of columns for the response text box.'
+      },
+      /** Whether or not to show the text input before the video finishes */
+      show_response_during_video: {
+        type: jspsych.ParameterType.BOOL,
+        pretty_name: 'Show Response During Video',
+        default: true,
+        description: 'If true, response area appears during the video.'
+      },
+      /** Label for the continue button */
+      button_label: {
+        type: jspsych.ParameterType.STRING,
+        pretty_name: 'Button label',
+        default: 'Continue',
+        description: 'Label of the button to finish the trial.'
+      },
+      /** Whether to require a response */
+      required: {
+        type: jspsych.ParameterType.BOOL,
+        pretty_name: 'Required',
+        default: false,
+        description: 'Whether or not a response is required'
+      },
+      /** Time to wait after the video ends before enabling response */
+      time_after_video: {
+        type: jspsych.ParameterType.INT,
+        pretty_name: 'Time After Video',
+        default: 0,
+        description: 'Time to wait after the video finishes before showing/enabling response (ms)'
+      }
+    }
+  };
+
+  /**
+   * **video-text-response**
+   * 
+   * A plugin for displaying a video stimulus and collecting a text response
+   * 
+   * @author Your Name
+   * @see {@link https://www.jspsych.org/plugins/jspsych-video-keyboard-response/ jsPsych Documentation}
+   */
+  class VideoTextResponsePlugin {
+    constructor(jsPsych) {
+      this.jsPsych = jsPsych;
+    }
+
+    trial(display_element, trial) {
+      // Display the video stimulus
+      let html = '<div id="jspsych-video-text-response-wrapper" style="margin: 0 auto;">';
+      
+      // Add prompt if there is one
+      if (trial.prompt !== null) {
+        html += `<div id="jspsych-video-text-response-prompt">${trial.prompt}</div>`;
+      }
+
+      // Display the video
+      html += '<div id="jspsych-video-text-response-stimulus">';
+      html += '<video id="jspsych-video-text-response-video" width="' + trial.width + '" height="' + trial.height + '"';
+      
+      if(trial.autoplay){
+        html += " autoplay ";
+      }
+      if(trial.loop){
+        html += " loop ";
+      }
+      if(trial.controls){
+        html += " controls ";
+      }
+      html += ">";
+      
+      var video_preload_blob = this.jsPsych.pluginAPI.getVideoBuffer(trial.stimulus[0]);
+      if (!video_preload_blob) {
+        for (var i = 0; i < trial.stimulus.length; i++) {
+          var file_name = trial.stimulus[i];
+          if (file_name.indexOf('?') > -1) {
+            file_name = file_name.substring(0, file_name.indexOf('?'));
+          }
+          var type = file_name.substr(file_name.lastIndexOf('.') + 1);
+          type = type.toLowerCase();
+          if (type == 'mov') {
+            console.warn('Warning: video-text-response plugin does not reliably support .mov files.');
+            type = 'mp4';
+          } else if (type == 'mpeg') {
+            type = 'mp4';
+          }
+          html += '<source src="' + file_name + '" type="video/' + type + '">';
+        }
+      }
+      html += "</video>";
+      html += "</div>";
+      
+      // Add response elements
+      html += '<div id="jspsych-video-text-response-response-area"';
+      if (!trial.show_response_during_video) {
+        html += ' style="display:none;"';
+      }
+      html += '>';
+      
+      // Add question text
+      html += `<p class="jspsych-video-text-response-question">${trial.question_text}</p>`;
+      
+      // Add text area
+      html += '<textarea name="response" id="jspsych-video-text-response-text" cols="' + 
+        trial.columns + '" rows="' + trial.rows + '" placeholder="' + 
+        trial.placeholder + '"';
+      
+      if (trial.required && !trial.show_response_during_video) {
+        html += ' required';
+      }
+      
+      html += '></textarea>';
+      
+      // Add submit button
+      html += '<button id="jspsych-video-text-response-next" class="jspsych-btn"';
+      if (trial.required && trial.show_response_during_video) {
+        html += ' disabled';
+      }
+      html += '>' + trial.button_label + '</button>';
+      
+      html += '</div>';
+      html += '</div>';
+      
+      display_element.innerHTML = html;
+      
+      // Response validation logic
+      if (trial.required && trial.show_response_during_video) {
+        document.getElementById('jspsych-video-text-response-text').addEventListener('input', function() {
+          if (this.value.trim() !== '') {
+            document.getElementById('jspsych-video-text-response-next').disabled = false;
+          } else {
+            document.getElementById('jspsych-video-text-response-next').disabled = true;
+          }
+        });
+      }
+      
+      const video_element = display_element.querySelector('#jspsych-video-text-response-video');
+      
+      // Set up video preload
+      if (video_preload_blob) {
+        video_element.src = video_preload_blob;
+      }
+      
+      let trial_complete = false;
+      
+      // Function to end trial
+      const end_trial = () => {
+        // Only execute if trial not already complete
+        if (trial_complete) return;
+        trial_complete = true;
+        
+        // Gather data
+        const trial_data = {
+          rt: performance.now() - start_time,
+          stimulus: trial.stimulus,
+          response: display_element.querySelector('#jspsych-video-text-response-text').value
+        };
+        
+        // Clear display
+        display_element.innerHTML = '';
+        
+        // End trial
+        this.jsPsych.finishTrial(trial_data);
+      };
+      
+      // Event handler for the video ending
+      const videoEnded = () => {
+        if (!trial.show_response_during_video) {
+          // If set to not show response during video, display it now
+          setTimeout(() => {
+            display_element.querySelector('#jspsych-video-text-response-response-area').style.display = 'block';
+          }, trial.time_after_video);
+        }
+      };
+      
+      // Handle button click
+      display_element.querySelector('#jspsych-video-text-response-next').addEventListener('click', end_trial);
+      
+      // Handle video ended event
+      video_element.addEventListener('ended', videoEnded);
+      
+      // Start timing
+      var start_time = performance.now();
+    }
+  }
+
+  return VideoTextResponsePlugin;
+})(jsPsychModule);
