@@ -233,8 +233,6 @@ var jsPsychVideoTextResponse = (function (jspsych) {
         });
       }
       
-      const video_element = display_element.querySelector('#jspsych-video-text-response-video');
-      
       // Set up video preload
       if (video_preload_blob) {
         video_element.src = video_preload_blob;
@@ -263,12 +261,8 @@ var jsPsychVideoTextResponse = (function (jspsych) {
         this.jsPsych.finishTrial(trial_data);
       };
       
-      // Event handler for the video ending - not needed anymore as we handle it above
-      
       // Handle button click
       display_element.querySelector('#jspsych-video-text-response-next').addEventListener('click', end_trial);
-      
-      // The video ended event is now handled in the videoPlayed tracking code above
       
       // Start timing
       var start_time = performance.now();
@@ -279,3 +273,8 @@ var jsPsychVideoTextResponse = (function (jspsych) {
 
   return VideoTextResponsePlugin;
 })(jsPsychModule);
+
+// This makes the plugin accessible to the experiment
+if (typeof jsPsychModule !== 'undefined') {
+  jsPsychModule.registerPlugin('video-text-response', jsPsychVideoTextResponse);
+}
