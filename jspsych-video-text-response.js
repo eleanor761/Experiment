@@ -206,10 +206,28 @@ var jsPsychVideoTextResponse = (function (jspsych) {
       
       display_element.innerHTML = html;
       
+      // Video playback tracking
+      let videoPlayed = false;
+      
+      // Disable the next button initially
+      document.getElementById('jspsych-video-text-response-next').disabled = true;
+      
+      // Track when video has finished playing at least once
+      video_element.addEventListener('ended', function() {
+        videoPlayed = true;
+        
+        // Only enable the button if there is text (if required) or regardless (if not required)
+        const textArea = document.getElementById('jspsych-video-text-response-text');
+        if (!trial.required || (trial.required && textArea.value.trim() !== '')) {
+          document.getElementById('jspsych-video-text-response-next').disabled = false;
+        }
+      });
+      
       // Response validation logic
-      if (trial.required && trial.show_response_during_video) {
+      if (trial.required) {
         document.getElementById('jspsych-video-text-response-text').addEventListener('input', function() {
-          if (this.value.trim() !== '') {
+          // Only enable the button if video has played AND there is text
+          if (videoPlayed && this.value.trim() !== '') {
             document.getElementById('jspsych-video-text-response-next').disabled = false;
           } else {
             document.getElementById('jspsych-video-text-response-next').disabled = true;
@@ -236,7 +254,8 @@ var jsPsychVideoTextResponse = (function (jspsych) {
         const trial_data = {
           rt: performance.now() - start_time,
           stimulus: trial.stimulus,
-          response_text: display_element.querySelector('#jspsych-video-text-response-text').value
+          response: display_element.querySelector('#jspsych-video-text-response-text').value,
+          trial_type: 'video-text-response'
         };
         
         // Clear display
@@ -246,21 +265,12 @@ var jsPsychVideoTextResponse = (function (jspsych) {
         this.jsPsych.finishTrial(trial_data);
       };
       
-      // Event handler for the video ending
-      const videoEnded = () => {
-        if (!trial.show_response_during_video) {
-          // If set to not show response during video, display it now
-          setTimeout(() => {
-            display_element.querySelector('#jspsych-video-text-response-response-area').style.display = 'block';
-          }, trial.time_after_video);
-        }
-      };
+      // Event handler for the video ending - not needed anymore as we handle it above
       
       // Handle button click
       display_element.querySelector('#jspsych-video-text-response-next').addEventListener('click', end_trial);
       
-      // Handle video ended event
-      video_element.addEventListener('ended', videoEnded);
+      // The video ended event is now handled in the videoPlayed tracking code above
       
       // Start timing
       var start_time = performance.now();

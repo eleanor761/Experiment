@@ -89,16 +89,21 @@ function createTrials(trialsData) {
             show_response_during_video: true,
             button_label: 'Submit',
             data: {
-                video_id: videoFile,
                 trial_num: trial.trial_num,
+                count: trial.count || 0,
                 type: trial.type || 'unknown',
-                subCode: participant_id,
-                trial_type: 'video_with_response'
+                dimension: trial.dimension || '',
+                filename: videoFile,
+                action: trial.action || '',
+                subCode: participant_id
             },
             on_finish: function(data) {
-                // Make sure the response is available with the same field name as in the original code
-                if (data.response_text) {
-                    data.response_text = data.response_text;
+                // Map the response to match the expected format
+                if (data.response) {
+                    // Save the text response with the correct field name
+                    jsPsych.data.get().addToLast({
+                        response_text: data.response
+                    });
                 }
             }
         };
@@ -121,7 +126,27 @@ const save_data = {
     action: "save",
     experiment_id: "DvojIUx5ETI3",
     filename: filename,
-    data_string: () => jsPsych.data.get().csv()
+    data_string: () => {
+        // Get all data and format it to match the demo_trials format with response
+        const allData = jsPsych.data.get().filter({trial_type: 'video-text-response'});
+        
+        // Create a new dataset with only the columns we want
+        const formattedData = allData.map(function(trial) {
+            return {
+                trial_num: trial.trial_num,
+                count: trial.count || 0,
+                type: trial.type || '',
+                dimension: trial.dimension || '',
+                filename: trial.filename,
+                action: trial.action || '',
+                subCode: trial.subCode,
+                rt: trial.rt,
+                response: trial.response
+            };
+        });
+        
+        return formattedData.csv();
+    }
 };
 
 // Function to load trials from CSV
