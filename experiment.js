@@ -3,8 +3,7 @@ let participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
 
 // Initialize jsPsych
 const jsPsych = new jsPsychModule.JsPsych({
-  show_progress_bar: true,
-  auto_update_progress_bar: false
+  show_progress_bar: false
 });
 
 // Create a random filename for data saving
@@ -81,7 +80,7 @@ function createTrials(trialsData) {
             controls: true,
             autoplay: true,
             loop: true,  // Match the original behavior which had loop enabled
-            prompt: `<p>Video ${trial.trial_num + 1}</p>`,
+            prompt: null,
             question_text: 'Please describe what you see in the video:',
             placeholder: 'Type your response here...',
             rows: 5,

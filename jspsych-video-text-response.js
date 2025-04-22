@@ -142,7 +142,7 @@ var jsPsychVideoTextResponse = (function (jspsych) {
       html += '<video id="jspsych-video-text-response-video" width="' + trial.width + '" height="' + trial.height + '"';
       
       if(trial.autoplay){
-        html += " autoplay ";
+        html += " autoplay muted ";
       }
       if(trial.loop){
         html += " loop ";
