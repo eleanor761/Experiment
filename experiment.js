@@ -59,6 +59,82 @@ function getVideoPath(stimName) {
     return `stimuli/norming/${stimName}`;
 }
 
+// Use custom HTML-based approach for video trials to avoid plugin issues
+function createVideoResponseTrial(videoFile, trialData) {
+    return {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: function() {
+            const videoPath = getVideoPath(videoFile);
+            return `
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <video id="stimulus-video" width="640" height="480" controls autoplay muted loop>
+                        <source src="${videoPath}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div style="margin-top: 20px; width: 80%;">
+                        <p><strong>Please describe what you see in the video:</strong></p>
+                        <textarea id="response-text" rows="5" style="width: 100%; padding: 10px;" required></textarea>
+                    </div>
+                </div>
+            `;
+        },
+        choices: ['Submit'],
+        data: {
+            trial_num: trialData.trial_num,
+            count: trialData.count || 0,
+            type: trialData.type || 'unknown',
+            dimension: trialData.dimension || '',
+            filename: videoFile,
+            action: trialData.action || '',
+            subCode: participant_id,
+            trial_type: 'video-text-response'
+        },
+        on_load: function() {
+            // Disable the button initially
+            document.querySelector('.jspsych-btn').disabled = true;
+            
+            // Track if video has played enough
+            let videoPlayed = false;
+            const video = document.getElementById('stimulus-video');
+            const textarea = document.getElementById('response-text');
+            const submitButton = document.querySelector('.jspsych-btn');
+            
+            // Enable button when video has played AND text entered
+            function checkEnableButton() {
+                if (videoPlayed && textarea.value.trim() !== '') {
+                    submitButton.disabled = false;
+                } else {
+                    submitButton.disabled = true;
+                }
+            }
+            
+            // When video plays for at least 2 seconds
+            video.addEventListener('timeupdate', function() {
+                if (video.currentTime > 2 && !videoPlayed) {
+                    videoPlayed = true;
+                    checkEnableButton();
+                }
+            });
+            
+            // Also check when video ends
+            video.addEventListener('ended', function() {
+                videoPlayed = true;
+                checkEnableButton();
+            });
+            
+            // Check when text is entered
+            textarea.addEventListener('input', function() {
+                checkEnableButton();
+            });
+        },
+        on_finish: function(data) {
+            // Save the text response
+            const responseText = document.getElementById('response-text').value;
+            data.response_text = responseText;
+        }
+    };
+}
+
 function createTrials(trialsData) {
     const experimentTrials = [];
     
@@ -71,43 +147,8 @@ function createTrials(trialsData) {
             return;
         }
         
-        // Create video text response trial using our custom plugin
-        const videoResponseTrial = {
-            type: jsPsychVideoTextResponse,  // Use the plugin object
-            stimulus: [getVideoPath(videoFile)],  // Wrapped in array as required by the plugin
-            width: 640,
-            height: 480,
-            controls: true,
-            autoplay: true,
-            loop: true,  // Match the original behavior which had loop enabled
-            prompt: null,
-            question_text: 'Please describe what you see in the video:',
-            placeholder: 'Type your response here...',
-            rows: 5,
-            columns: 60,
-            required: true,
-            show_response_during_video: true,
-            button_label: 'Submit',
-            data: {
-                trial_num: trial.trial_num,
-                count: trial.count || 0,
-                type: trial.type || 'unknown',
-                dimension: trial.dimension || '',
-                filename: videoFile,
-                action: trial.action || '',
-                subCode: participant_id
-            },
-            on_finish: function(data) {
-                // Map the response to match the expected format
-                if (data.response) {
-                    // Save the text response with the correct field name
-                    jsPsych.data.get().addToLast({
-                        response_text: data.response
-                    });
-                }
-            }
-        };
-
+        // Create HTML-based video trial that doesn't rely on the custom plugin
+        const videoResponseTrial = createVideoResponseTrial(videoFile, trial);
         experimentTrials.push(videoResponseTrial);
     });
     
@@ -141,7 +182,7 @@ const save_data = {
                 action: trial.action || '',
                 subCode: trial.subCode,
                 rt: trial.rt,
-                response: trial.response
+                response: trial.response_text || ''
             };
         });
         
