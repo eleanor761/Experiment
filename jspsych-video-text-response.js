@@ -196,9 +196,7 @@ var jsPsychVideoTextResponse = (function (jspsych) {
       
       // Add submit button
       html += '<button id="jspsych-video-text-response-next" class="jspsych-btn"';
-      if (trial.required && trial.show_response_during_video) {
-        html += ' disabled';
-      }
+      html += ' disabled';
       html += '>' + trial.button_label + '</button>';
       
       html += '</div>';
@@ -206,11 +204,11 @@ var jsPsychVideoTextResponse = (function (jspsych) {
       
       display_element.innerHTML = html;
       
+      // Now get video element AFTER adding to DOM
+      const video_element = display_element.querySelector('#jspsych-video-text-response-video');
+      
       // Video playback tracking
       let videoPlayed = false;
-      
-      // Disable the next button initially
-      document.getElementById('jspsych-video-text-response-next').disabled = true;
       
       // Track when video has finished playing at least once
       video_element.addEventListener('ended', function() {
