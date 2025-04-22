@@ -1,8 +1,6 @@
 /**
  * jspsych-video-text-response
  * A jsPsych plugin for displaying a video stimulus and collecting a text response
- * 
- * @author Your Name
  */
 var jsPsychVideoTextResponse = (function (jspsych) {
   'use strict';
@@ -11,8 +9,7 @@ var jsPsychVideoTextResponse = (function (jspsych) {
     name: 'video-text-response',
     parameters: {
       /** 
-       * The video file to play. Video can be provided in multiple file formats, 
-       * like in the jsPsych video plugin.
+       * The video file to play. Video can be provided in multiple file formats.
        */
       stimulus: {
         type: jspsych.ParameterType.VIDEO,
@@ -125,9 +122,6 @@ var jsPsychVideoTextResponse = (function (jspsych) {
    * **video-text-response**
    * 
    * A plugin for displaying a video stimulus and collecting a text response
-   * 
-   * @author Your Name
-   * @see {@link https://www.jspsych.org/plugins/jspsych-video-keyboard-response/ jsPsych Documentation}
    */
   class VideoTextResponsePlugin {
     constructor(jsPsych) {
@@ -242,7 +236,7 @@ var jsPsychVideoTextResponse = (function (jspsych) {
         const trial_data = {
           rt: performance.now() - start_time,
           stimulus: trial.stimulus,
-          response: display_element.querySelector('#jspsych-video-text-response-text').value
+          response_text: display_element.querySelector('#jspsych-video-text-response-text').value
         };
         
         // Clear display
@@ -272,6 +266,8 @@ var jsPsychVideoTextResponse = (function (jspsych) {
       var start_time = performance.now();
     }
   }
+
+  VideoTextResponsePlugin.info = info;
 
   return VideoTextResponsePlugin;
 })(jsPsychModule);

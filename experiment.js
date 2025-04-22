@@ -72,7 +72,7 @@ function createTrials(trialsData) {
             return;
         }
         
-        // Create video text response trial using our new plugin
+        // Create video text response trial using our custom plugin
         const videoResponseTrial = {
             type: jsPsychVideoTextResponse,
             stimulus: [getVideoPath(videoFile)],  // Wrapped in array as required by the plugin
@@ -95,6 +95,12 @@ function createTrials(trialsData) {
                 type: trial.type || 'unknown',
                 subCode: participant_id,
                 trial_type: 'video_with_response'
+            },
+            on_finish: function(data) {
+                // Make sure the response is available with the same field name as in the original code
+                if (data.response_text) {
+                    data.response_text = data.response_text;
+                }
             }
         };
 
