@@ -276,5 +276,5 @@ var jsPsychVideoTextResponse = (function (jspsych) {
 
 // This makes the plugin accessible to the experiment
 if (typeof jsPsychModule !== 'undefined') {
-  jsPsychModule.registerPlugin('video-text-response', jsPsychVideoTextResponse);
+  var jsPsychVideoTextResponse = jsPsychModule.registerPlugin('video-text-response', VideoTextResponsePlugin);
 }

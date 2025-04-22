@@ -73,7 +73,7 @@ function createTrials(trialsData) {
         
         // Create video text response trial using our custom plugin
         const videoResponseTrial = {
-            type: 'video-text-response',  // Use the plugin name instead of the variable
+            type: jsPsychVideoTextResponse,  // Use the plugin object
             stimulus: [getVideoPath(videoFile)],  // Wrapped in array as required by the plugin
             width: 640,
             height: 480,
