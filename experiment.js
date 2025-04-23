@@ -259,8 +259,7 @@ async function runExperiment() {
             instructions,
             preload,
             ...experimentTrials,
-            save_data,
-            completion_code_trial
+            save_data
         ];
 
         console.log('Timeline initialized with', timeline.length, 'items');
