@@ -1,16 +1,39 @@
-// Generate participant ID at the start
-let participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
-const completion_code = generateRandomString(3) + 'zvz' + generateRandomString(3);
-
-// Function to generate a random string of specified length
-function generateRandomString(length) {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let result = '';
-  for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
+// Add a message during data saving
+const saving_message = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+    <div style="text-align:center">
+      <h2>Saving your data...</h2>
+      <p>Please wait while we save your responses. This should only take a few seconds.</p>
+      <div class="spinner"></div>
+    </div>
+    <style>
+      .spinner {
+        border: 16px solid #f3f3f3;
+        border-top: 16px solid #3498db;
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        animation: spin 2s linear infinite;
+        margin: 20px auto;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+  `,
+  choices: "NO_KEYS",
+  trial_duration: 1000, // Show for at least 1 second
+  data: {
+    trial_type: 'saving_message'
   }
-  return result;
-}
+};// Generate participant ID at the start
+let participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
+
+// Generate a completion code for the participant
+let completion_code = `CODE-${Math.floor(Math.random() * 900000) + 100000}`;
 
 // Initialize jsPsych
 const jsPsych = new jsPsychModule.JsPsych({
@@ -177,6 +200,8 @@ const save_data = {
       jsPsych.data.addProperties({
           completed: true
       });
+      // Continue to the next trial (completion code) automatically
+      jsPsych.finishTrial();
   },
   error_callback: function(error) {
       console.error('Error saving to DataPipe:', error);
@@ -199,11 +224,10 @@ const completion_code_trial = {
       return `
           <p>You have completed the main experiment!</p>
           <p>Your completion code is: <strong>${completion_code}</strong></p>
-          <p>Please make a note of this code - you will need to enter it in MTurk to receive payment.</p>
-          <p>Click the button below to continue to a brief survey.</p>
+          <p>Please make a note of this code - you will need to enter it in SONA to receive credit.</p>
       `;
   },
-  choices: ['Continue to Survey'],
+  choices: ['Finish'],
   data: {
       trial_type: 'completion'
   },
@@ -237,6 +261,7 @@ async function runExperiment() {
             instructions,
             preload,
             ...experimentTrials,
+            saving_message,
             save_data,
             completion_code_trial
         ];
