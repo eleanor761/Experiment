@@ -138,36 +138,38 @@ const preload = {
 
 // Function to filter and format data for saving
 function getFilteredData() {
-  // Get all video-text-response trials
-  let allData = jsPsych.data.get().filter({'trial_type': 'video-text-response'});
+  // Get all data
+  const allData = jsPsych.data.get().filter({'trial_type': 'video-text-response'}).values();
   
   // Log the data that will be saved
-  console.log('Data being prepared for saving:', allData.values());
-  console.log('Number of trials to save:', allData.count());
+  console.log('Data being prepared for saving:', allData);
+  console.log('Number of trials to save:', allData.length);
   
   // Handle empty data case
-  if (allData.count() === 0) {
+  if (allData.length === 0) {
     console.error('No video-text-response trials found in data');
     return 'subCode,trial_num,word,dimension,filename,action,rt,description\n';
   }
   
-  // Filter out the unwanted columns
-  const columnsToExclude = ['stimulus', 'response', 'response_text', 'trial_index', 'time_elapsed', 'internal_node_id'];
+  // Define the columns we want to keep
+  const columnsToKeep = ['subCode', 'trial_num', 'word', 'dimension', 'filename', 'action', 'rt', 'description'];
   
-  // Create a modified dataset with only the columns we want
-  let filteredData = allData.clone();
+  // Create CSV header
+  let csvData = columnsToKeep.join(',') + '\n';
   
-  // Remove unwanted columns from each trial
-  filteredData.values().forEach(trial => {
-    columnsToExclude.forEach(col => {
-      if (trial.hasOwnProperty(col)) {
-        delete trial[col];
+  // Add each row with only the required columns
+  allData.forEach(trial => {
+    const row = columnsToKeep.map(col => {
+      // Handle special cases like commas in text fields
+      if (typeof trial[col] === 'string' && trial[col].includes(',')) {
+        return `"${trial[col].replace(/"/g, '""')}"`;  // Escape quotes in CSV
       }
-    });
+      return trial[col];
+    }).join(',');
+    
+    csvData += row + '\n';
   });
   
-  // Convert to CSV
-  const csvData = filteredData.csv();
   console.log('CSV data prepared (first 200 chars):', csvData.substring(0, 200) + '...');
   
   return csvData;
