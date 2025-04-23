@@ -185,9 +185,23 @@ const save_data = {
     action: "save",
     experiment_id: "DvojIUx5ETI3",
     filename: `${participant_id}.csv`,
-    // This is the key change - provide the direct data without filtering
-    data_string: function() {
-        return jsPsych.data.get().filter({trial_type: 'video-text-response'}).csv();
+    data_string: () => {
+        // Get only the video-text-response trials
+        const allTrials = jsPsych.data.get().filter({trial_type: 'video-text-response'}).values();
+        
+        // Define headers (only the columns we want)
+        const headers = 'subCode,trial_num,word,dimension,filename,action,rt,description';
+        
+        // Create rows with only the columns we want
+        const rows = allTrials.map(trial => {
+            return `${trial.subCode},${trial.trial_num},${trial.word},${trial.dimension},${trial.filename},${trial.action},${trial.rt},${typeof trial.description === 'string' && trial.description.includes(',') ? `"${trial.description.replace(/"/g, '""')}"` : trial.description}`;
+        });
+        
+        // Join headers and rows into CSV string
+        const csvData = [headers, ...rows].join('\n');
+        console.log('CSV data prepared (first 200 chars):', csvData.substring(0, 200) + '...');
+        
+        return csvData;
     },
     success_callback: function() {
         console.log('Data saved successfully to DataPipe!');
