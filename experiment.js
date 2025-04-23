@@ -2,6 +2,16 @@
 let participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
 const completion_code = generateRandomString(3) + 'zvz' + generateRandomString(3);
 
+// Function to generate a random string of specified length
+function generateRandomString(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
+
 // Initialize jsPsych
 const jsPsych = new jsPsychModule.JsPsych({
   show_progress_bar: false
