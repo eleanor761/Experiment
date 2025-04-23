@@ -1,39 +1,16 @@
-// Add a message during data saving
-const saving_message = {
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: `
-    <div style="text-align:center">
-      <h2>Saving your data...</h2>
-      <p>Please wait while we save your responses. This should only take a few seconds.</p>
-      <div class="spinner"></div>
-    </div>
-    <style>
-      .spinner {
-        border: 16px solid #f3f3f3;
-        border-top: 16px solid #3498db;
-        border-radius: 50%;
-        width: 80px;
-        height: 80px;
-        animation: spin 2s linear infinite;
-        margin: 20px auto;
-      }
-      
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-    </style>
-  `,
-  choices: "NO_KEYS",
-  trial_duration: 1000, // Show for at least 1 second
-  data: {
-    trial_type: 'saving_message'
-  }
-};// Generate participant ID at the start
+// Generate participant ID at the start
 let participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
+const completion_code = generateRandomString(3) + 'zvz' + generateRandomString(3);
 
-// Generate a completion code for the participant
-let completion_code = `CODE-${Math.floor(Math.random() * 900000) + 100000}`;
+// Function to generate a random string of specified length
+function generateRandomString(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
 
 // Initialize jsPsych
 const jsPsych = new jsPsychModule.JsPsych({
@@ -174,8 +151,25 @@ function getFilteredData() {
     return 'subCode,trial_num,word,dimension,filename,action,rt,description\n';
   }
   
-  // Convert to CSV string
-  const csvData = jsPsych.data.get().filter({'trial_type': 'video-text-response'}).csv();
+  // Create a custom CSV with only the columns we want
+  const requiredColumns = ['subCode', 'trial_num', 'word', 'dimension', 'filename', 'action', 'rt', 'description'];
+  
+  // Create CSV header
+  let csvData = requiredColumns.join(',') + '\n';
+  
+  // Add each row with only the required columns
+  allData.forEach(trial => {
+    const row = requiredColumns.map(col => {
+      // Handle special cases like commas in text fields
+      if (typeof trial[col] === 'string' && trial[col].includes(',')) {
+        return `"${trial[col].replace(/"/g, '""')}"`;  // Escape quotes in CSV
+      }
+      return trial[col];
+    }).join(',');
+    
+    csvData += row + '\n';
+  });
+  
   console.log('CSV data prepared (first 200 chars):', csvData.substring(0, 200) + '...');
   
   return csvData;
@@ -200,8 +194,6 @@ const save_data = {
       jsPsych.data.addProperties({
           completed: true
       });
-      // Continue to the next trial (completion code) automatically
-      jsPsych.finishTrial();
   },
   error_callback: function(error) {
       console.error('Error saving to DataPipe:', error);
@@ -225,6 +217,7 @@ const completion_code_trial = {
           <p>You have completed the main experiment!</p>
           <p>Your completion code is: <strong>${completion_code}</strong></p>
           <p>Please make a note of this code - you will need to enter it in SONA to receive credit.</p>
+          <p>You can close the page now.</p>
       `;
   },
   choices: ['Finish'],
@@ -261,7 +254,6 @@ async function runExperiment() {
             instructions,
             preload,
             ...experimentTrials,
-            saving_message,
             save_data,
             completion_code_trial
         ];
