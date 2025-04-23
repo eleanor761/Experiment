@@ -132,8 +132,8 @@ var jsPsychVideoTextResponse = (function (jspsych) {
       // Display the video stimulus
       let html = '<div id="jspsych-video-text-response-wrapper" style="margin: 0 auto;">';
       
-      // Add prompt if there is one
-      if (trial.prompt !== null) {
+      // Add prompt if there is one and it's not a title
+      if (trial.prompt !== null && !trial.prompt.includes('Video')) {
         html += `<div id="jspsych-video-text-response-prompt">${trial.prompt}</div>`;
       }
   
@@ -211,6 +211,7 @@ var jsPsychVideoTextResponse = (function (jspsych) {
       
       // Video playback tracking
       let videoPlayed = false;
+      let videoComplete = false;
       
       // Set up video preload
       if (video_preload_blob) {
@@ -224,14 +225,10 @@ var jsPsychVideoTextResponse = (function (jspsych) {
         
         // Function to check if response is valid
         const checkResponseValid = function() {
-          // If video must be watched and hasn't been, keep button disabled
-          if (!trial.show_response_during_video && !videoPlayed) {
-            nextButton.disabled = true;
-            return;
-          }
-          
-          // Enable button only if there's text
-          nextButton.disabled = textArea.value.trim() === '';
+          // Only enable button if both conditions are met:
+          // 1. Video has completed playing at least once
+          // 2. There is text in the text area
+          nextButton.disabled = !videoComplete || textArea.value.trim() === '';
         };
         
         // Check validity whenever text changes
@@ -240,6 +237,8 @@ var jsPsychVideoTextResponse = (function (jspsych) {
         // Also check validity when video ends
         video_element.addEventListener('ended', function() {
           videoPlayed = true;
+          videoComplete = true;
+          console.log("Video has completed playing");
           
           // Show response area if it was hidden
           if (!trial.show_response_during_video) {
@@ -251,19 +250,11 @@ var jsPsychVideoTextResponse = (function (jspsych) {
             checkResponseValid();
           }
         });
-        
-        // Also handle timeupdate event for partial video watching
-        video_element.addEventListener('timeupdate', function() {
-          // If we've played at least 2 seconds and haven't already marked as played
-          if (video_element.currentTime > 2 && !videoPlayed) {
-            videoPlayed = true;
-            checkResponseValid();
-          }
-        });
       } else {
         // If response not required, just handle video end
         video_element.addEventListener('ended', function() {
           videoPlayed = true;
+          videoComplete = true;
           
           // Show response area if it was hidden
           if (!trial.show_response_during_video) {
@@ -272,14 +263,9 @@ var jsPsychVideoTextResponse = (function (jspsych) {
             }, trial.time_after_video);
           }
           
-          // Enable button
+          // Enable button only when video is complete
           document.getElementById('jspsych-video-text-response-next').disabled = false;
         });
-        
-        // If showing during video and not required, enable button immediately
-        if (trial.show_response_during_video) {
-          document.getElementById('jspsych-video-text-response-next').disabled = false;
-        }
       }
       
       let trial_complete = false;
@@ -295,6 +281,7 @@ var jsPsychVideoTextResponse = (function (jspsych) {
           rt: performance.now() - start_time,
           stimulus: trial.stimulus,
           response: display_element.querySelector('#jspsych-video-text-response-text').value,
+          response_text: display_element.querySelector('#jspsych-video-text-response-text').value,
           trial_type: 'video-text-response'
         };
         
