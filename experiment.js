@@ -60,53 +60,63 @@ function getVideoPath(stimName) {
 }
 
 function createTrials(trialsData) {
-    const experimentTrials = [];
-    
-    trialsData.forEach(trial => {
-        // Try different possible field names for the filename
-        const videoFile = trial.filename || trial.file_name || trial.video || trial.stimuli;
-        
-        if (!videoFile) {
-            console.warn('Trial missing filename field:', trial);
-            return;
-        }
-        
-        // Create video text response trial using our custom plugin
-        const videoResponseTrial = {
-            type: jsPsychVideoTextResponse,
-            stimulus: [getVideoPath(videoFile)],  // Wrapped in array as required by the plugin
-            width: 640,
-            height: 480,
-            controls: true,
-            autoplay: true,
-            loop: true,  // Match the original behavior which had loop enabled
-            prompt: `<p>Video ${trial.trial_num + 1}</p>`,
-            question_text: 'Please describe what you see in the video:',
-            placeholder: 'Type your response here...',
-            rows: 5,
-            columns: 60,
-            required: true,
-            show_response_during_video: true,
-            button_label: 'Submit',
-            data: {
-                video_id: videoFile,
-                trial_num: trial.trial_num,
-                type: trial.type || 'unknown',
-                subCode: participant_id,
-                trial_type: 'video_with_response'
-            },
-            on_finish: function(data) {
-                // Make sure the response is available with the same field name as in the original code
-                if (data.response_text) {
-                    data.response_text = data.response_text;
-                }
-            }
-        };
+  const experimentTrials = [];
+  
+  trialsData.forEach(trial => {
+      // Create video text response trial using our custom plugin
+      const videoResponseTrial = {
+          type: jsPsychVideoTextResponse,
+          stimulus: [getVideoPath(trial.filename)],
+          width: 640,
+          height: 480,
+          controls: true,
+          autoplay: true,
+          loop: true,  // Keep looping for the experiment
+          prompt: null, // No title
+          question_text: 'Please describe what you see in the video:',
+          placeholder: 'Type your response here...',
+          rows: 5,
+          columns: 60,
+          required: true,
+          show_response_during_video: true,
+          button_label: 'Submit',
+          // Store all the original trial data
+          data: {
+              trial_num: trial.trial_num,
+              count: trial.count,
+              type: trial.type,
+              dimension: trial.dimension,
+              filename: trial.filename,
+              action: trial.action,
+              participant_id: participant_id,
+              trial_type: 'video_with_response'
+          },
+          on_finish: function(data) {
+              // Transfer the response text to 'description' field to match demo_data format
+              data.description = data.response_text || data.response;
+              
+              // Calculate and record RT in the format you want
+              data.RT = Math.round(data.rt); // Round to integer if needed
+              
+              // Making sure all fields align with the demo_data format
+              data = {
+                  participant_id: participant_id,
+                  trial_num: trial.trial_num,
+                  count: trial.count,
+                  type: trial.type,
+                  dimension: trial.dimension,
+                  filename: trial.filename,
+                  action: trial.action,
+                  RT: data.RT,
+                  description: data.description
+              };
+          }
+      };
 
-        experimentTrials.push(videoResponseTrial);
-    });
-    
-    return experimentTrials;
+      experimentTrials.push(videoResponseTrial);
+  });
+  
+  return experimentTrials;
 }
 
 // Preload media files
@@ -117,12 +127,20 @@ const preload = {
 
 // Data saving configuration
 const save_data = {
-    type: jsPsychPipe, 
-    action: "save",
-    experiment_id: "DvojIUx5ETI3",
-    filename: filename,
-    data_string: () => jsPsych.data.get().csv()
-};
+  type: jsPsychPipe, 
+  action: "save",
+  experiment_id: "DvojIUx5ETI3",
+  filename: function() {
+      return `${participant_id}_${filename}`;
+  },
+  data_string: function() {
+      // Get only the trial data that matches our expected format
+      const relevantData = jsPsych.data.get().filter({trial_type: 'video-text-response'});
+      
+      // Return formatted CSV
+      return relevantData.csv();
+  }
+}
 
 // Function to load trials from CSV
 async function loadTrials() {
