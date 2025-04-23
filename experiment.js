@@ -179,46 +179,66 @@ function getFilteredData() {
     return csvData;
 }
 
+// Function to filter and format data for saving
+function getFilteredData() {
+    const allData = jsPsych.data.get().values();
+    
+    // Filter to only video-text-response trials
+    const responseTrials = allData.filter(trial => 
+        trial.trial_type === 'video-text-response'
+    );
+    
+    // Map to array of objects with only the fields we want
+    const formattedData = responseTrials.map(trial => ({
+        subCode: trial.subCode,
+        trial_num: trial.trial_num,
+        word: trial.word,
+        dimension: trial.dimension,
+        filename: trial.filename,
+        action: trial.action,
+        rt: trial.rt,
+        description: trial.description
+    }));
+
+    // Convert to CSV string manually to ensure proper formatting
+    const headers = Object.keys(formattedData[0]).join(',');
+    const rows = formattedData.map(trial => 
+        Object.values(trial).map(value => 
+            typeof value === 'string' ? `"${value}"` : value
+        ).join(',')
+    );
+    
+    return headers + '\n' + rows.join('\n');
+}
+
 // Configure data saving
 const save_data = {
-  type: jsPsychPipe,
-  action: "save",
-  experiment_id: "DvojIUx5ETI3",
-  filename: `${participant_id}.csv`,
-  data_string: function() {
-      // Filter to only video-text-response trials
-      const filteredData = jsPsych.data.get().filter({trial_type: 'video-text-response'});
-      
-      // Important: Create a copy of the data
-      const modifiedData = jsPsych.data.get();
-      
-      // Clear all data
-      modifiedData.clear();
-      
-      // Add only the filtered trials with selected columns
-      filteredData.values().forEach(trial => {
-          modifiedData.push({
-              subCode: trial.subCode,
-              trial_num: trial.trial_num,
-              word: trial.word,
-              dimension: trial.dimension,
-              filename: trial.filename,
-              action: trial.action,
-              rt: trial.rt,
-              description: trial.description
-          });
-      });
-      
-      // Return CSV string of the modified data
-      return modifiedData.csv();
-  },
-  success_callback: function() {
-      console.log('Data saved successfully to DataPipe!');
-      console.log('Participant ID:', participant_id);
-  },
-  error_callback: function(error) {
-      console.error('Error saving to DataPipe:', error);
-  }
+    type: jsPsychPipe,
+    action: "save",
+    experiment_id: "DvojIUx5ETI3",
+    filename: `${participant_id}.csv`,
+    data_string: getFilteredData,
+    success_callback: function() {
+        console.log('Data saved successfully to DataPipe!');
+        console.log('Participant ID:', participant_id);
+        console.log('Filename:', `${participant_id}.csv`);
+        jsPsych.data.addProperties({
+            completed: true
+        });
+    },
+    error_callback: function(error) {
+        console.error('Error saving to DataPipe:', error);
+        console.error('Error details:', JSON.stringify(error));
+        
+        // Try to get more information about the error
+        if (error.response) {
+            console.error('Response status:', error.response.status);
+            console.error('Response data:', error.response.data);
+        }
+        
+        // Display error to user
+        jsPsych.endExperiment(`<p>There was an error saving your data. Please contact the researcher with this information: ${error}</p><p>Error code: ${error.status || 'unknown'}</p>`);
+    }
 };
 
 const completion_code_trial = {
