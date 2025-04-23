@@ -136,56 +136,80 @@ const preload = {
     auto_preload: true
 };
 
+// Function to filter and format data for saving
 function getFilteredData() {
-  // Get all trials and filter to only video-text-response trials
-  const responseData = jsPsych.data.get().filter({trial_type: 'video-text-response'});
-  
-  if (responseData.count() === 0) {
-      console.error('No video-text-response trials found in data');
-      return 'subCode,trial_num,word,dimension,filename,action,rt,description\n';
-  }
-  
-  // These are the only columns we want to keep
-  const columnsToKeep = ['subCode', 'trial_num', 'word', 'dimension', 'filename', 'action', 'rt', 'description'];
-  
-  // Create a new dataset with only the columns we want
-  let newData = [];
-  responseData.values().forEach(trial => {
-      let newTrial = {};
-      columnsToKeep.forEach(col => {
-          newTrial[col] = trial[col];
-      });
-      newData.push(newTrial);
-  });
-  
-  // Convert to CSV
-  let header = columnsToKeep.join(',');
-  let rows = newData.map(row => {
-      return columnsToKeep.map(col => {
-          // Handle strings with commas
-          if (typeof row[col] === 'string' && row[col].includes(',')) {
-              return `"${row[col].replace(/"/g, '""')}"`;
-          }
-          return row[col];
-      }).join(',');
-  });
-  
-  return header + '\n' + rows.join('\n');
+    const allData = jsPsych.data.get().values();
+    
+    // Filter video-text-response trials
+    const responseTrials = allData.filter(trial => 
+        trial.trial_type === 'video-text-response'
+    );
+    
+    // Map to array of objects with only the fields we want
+    const formattedData = responseTrials.map(trial => ({
+        subCode: trial.subCode,
+        trial_num: trial.trial_num,
+        word: trial.word,
+        dimension: trial.dimension,
+        filename: trial.filename,
+        action: trial.action,
+        rt: trial.rt,
+        description: trial.description
+    }));
+
+    // Convert to CSV string manually to ensure proper formatting
+    if (formattedData.length === 0) {
+        console.error('No video-text-response trials found in data');
+        return 'subCode,trial_num,word,dimension,filename,action,rt,description\n';
+    }
+    
+    const headers = Object.keys(formattedData[0]).join(',');
+    const rows = formattedData.map(trial => 
+        Object.values(trial).map(value => {
+            if (typeof value === 'string' && value.includes(',')) {
+                return `"${value.replace(/"/g, '""')}"`;  // Escape quotes in CSV
+            }
+            return value;
+        }).join(',')
+    );
+    
+    const csvData = headers + '\n' + rows.join('\n');
+    console.log('CSV data prepared (first 200 chars):', csvData.substring(0, 200) + '...');
+    
+    return csvData;
 }
 
 // Configure data saving
 const save_data = {
-  type: jsPsychPipe,
-  action: "save",
-  experiment_id: "DvojIUx5ETI3",
-  filename: `${participant_id}.csv`,
-  data_string: getFilteredData,  // Important: function reference, not call
-  success_callback: function() {
-      console.log('Data saved successfully to DataPipe!');
-  },
-  error_callback: function(error) {
-      console.error('Error saving to DataPipe:', error);
-  }
+    type: jsPsychPipe,
+    action: "save",
+    experiment_id: "DvojIUx5ETI3",
+    filename: `${participant_id}.csv`,
+    // This is the key change - provide the direct data without filtering
+    data_string: function() {
+        return jsPsych.data.get().filter({trial_type: 'video-text-response'}).csv();
+    },
+    success_callback: function() {
+        console.log('Data saved successfully to DataPipe!');
+        console.log('Participant ID:', participant_id);
+        console.log('Filename:', `${participant_id}.csv`);
+        jsPsych.data.addProperties({
+            completed: true
+        });
+    },
+    error_callback: function(error) {
+        console.error('Error saving to DataPipe:', error);
+        console.error('Error details:', JSON.stringify(error));
+        
+        // Try to get more information about the error
+        if (error.response) {
+            console.error('Response status:', error.response.status);
+            console.error('Response data:', error.response.data);
+        }
+        
+        // Display error to user
+        jsPsych.endExperiment(`<p>There was an error saving your data. Please contact the researcher with this information: ${error}</p><p>Error code: ${error.status || 'unknown'}</p>`);
+    }
 };
 
 const completion_code_trial = {
