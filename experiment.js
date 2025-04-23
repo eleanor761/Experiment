@@ -145,11 +145,32 @@ function getFilteredData() {
       return 'subCode,trial_num,word,dimension,filename,action,rt,description\n';
   }
   
-  // Use the built-in csv method but with column filtering
-  // This is available in jsPsych 7.3.3
-  return responseData.csv({
-      columns: ['subCode', 'trial_num', 'word', 'dimension', 'filename', 'action', 'rt', 'description']
+  // These are the only columns we want to keep
+  const columnsToKeep = ['subCode', 'trial_num', 'word', 'dimension', 'filename', 'action', 'rt', 'description'];
+  
+  // Create a new dataset with only the columns we want
+  let newData = [];
+  responseData.values().forEach(trial => {
+      let newTrial = {};
+      columnsToKeep.forEach(col => {
+          newTrial[col] = trial[col];
+      });
+      newData.push(newTrial);
   });
+  
+  // Convert to CSV
+  let header = columnsToKeep.join(',');
+  let rows = newData.map(row => {
+      return columnsToKeep.map(col => {
+          // Handle strings with commas
+          if (typeof row[col] === 'string' && row[col].includes(',')) {
+              return `"${row[col].replace(/"/g, '""')}"`;
+          }
+          return row[col];
+      }).join(',');
+  });
+  
+  return header + '\n' + rows.join('\n');
 }
 
 // Configure data saving
