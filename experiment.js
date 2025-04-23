@@ -73,7 +73,7 @@ function createVideoResponseTrial(videoFile, trialData) {
                     </video>
                     <div style="margin-top: 20px; width: 80%;">
                         <p><strong>Please describe what you see in the video:</strong></p>
-                        <textarea id="response-text" rows="5" style="width: 100%; padding: 10px;" required></textarea>
+                        <textarea id="response-text" rows="5" style="width: 100%; padding: 10px;"></textarea>
                     </div>
                 </div>
             `;
@@ -90,47 +90,21 @@ function createVideoResponseTrial(videoFile, trialData) {
             trial_type: 'video-text-response'
         },
         on_load: function() {
-            // Disable the button initially
-            document.querySelector('.jspsych-btn').disabled = true;
-            
-            // Track if video has played enough
-            let videoPlayed = false;
-            const video = document.getElementById('stimulus-video');
-            const textarea = document.getElementById('response-text');
-            const submitButton = document.querySelector('.jspsych-btn');
-            
-            // Enable button when video has played AND text entered
-            function checkEnableButton() {
-                if (videoPlayed && textarea.value.trim() !== '') {
-                    submitButton.disabled = false;
-                } else {
-                    submitButton.disabled = true;
-                }
-            }
-            
-            // When video plays for at least 2 seconds
-            video.addEventListener('timeupdate', function() {
-                if (video.currentTime > 2 && !videoPlayed) {
-                    videoPlayed = true;
-                    checkEnableButton();
-                }
-            });
-            
-            // Also check when video ends
-            video.addEventListener('ended', function() {
-                videoPlayed = true;
-                checkEnableButton();
-            });
-            
-            // Check when text is entered
-            textarea.addEventListener('input', function() {
-                checkEnableButton();
-            });
+            console.log("Trial loaded - button should be enabled immediately");
+            // No disabling of button, no event listeners
         },
         on_finish: function(data) {
-            // Save the text response
+            // Get the text response
             const responseText = document.getElementById('response-text').value;
-            data.response_text = responseText;
+            
+            // If no text was entered, set a default message
+            if (!responseText || responseText.trim() === '') {
+                data.response_text = "No response provided";
+            } else {
+                data.response_text = responseText;
+            }
+            
+            console.log("Trial finished, response:", data.response_text);
         }
     };
 }
