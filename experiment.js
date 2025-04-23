@@ -181,49 +181,44 @@ function getFilteredData() {
 
 // Configure data saving
 const save_data = {
-    type: jsPsychPipe,
-    action: "save",
-    experiment_id: "DvojIUx5ETI3",
-    filename: `${participant_id}.csv`,
-    data_string: () => {
-        // Get only the video-text-response trials
-        const allTrials = jsPsych.data.get().filter({trial_type: 'video-text-response'}).values();
-        
-        // Define headers (only the columns we want)
-        const headers = 'subCode,trial_num,word,dimension,filename,action,rt,description';
-        
-        // Create rows with only the columns we want
-        const rows = allTrials.map(trial => {
-            return `${trial.subCode},${trial.trial_num},${trial.word},${trial.dimension},${trial.filename},${trial.action},${trial.rt},${typeof trial.description === 'string' && trial.description.includes(',') ? `"${trial.description.replace(/"/g, '""')}"` : trial.description}`;
-        });
-        
-        // Join headers and rows into CSV string
-        const csvData = [headers, ...rows].join('\n');
-        console.log('CSV data prepared (first 200 chars):', csvData.substring(0, 200) + '...');
-        
-        return csvData;
-    },
-    success_callback: function() {
-        console.log('Data saved successfully to DataPipe!');
-        console.log('Participant ID:', participant_id);
-        console.log('Filename:', `${participant_id}.csv`);
-        jsPsych.data.addProperties({
-            completed: true
-        });
-    },
-    error_callback: function(error) {
-        console.error('Error saving to DataPipe:', error);
-        console.error('Error details:', JSON.stringify(error));
-        
-        // Try to get more information about the error
-        if (error.response) {
-            console.error('Response status:', error.response.status);
-            console.error('Response data:', error.response.data);
-        }
-        
-        // Display error to user
-        jsPsych.endExperiment(`<p>There was an error saving your data. Please contact the researcher with this information: ${error}</p><p>Error code: ${error.status || 'unknown'}</p>`);
-    }
+  type: jsPsychPipe,
+  action: "save",
+  experiment_id: "DvojIUx5ETI3",
+  filename: `${participant_id}.csv`,
+  data_string: function() {
+      // Filter to only video-text-response trials
+      const filteredData = jsPsych.data.get().filter({trial_type: 'video-text-response'});
+      
+      // Important: Create a copy of the data
+      const modifiedData = jsPsych.data.get();
+      
+      // Clear all data
+      modifiedData.clear();
+      
+      // Add only the filtered trials with selected columns
+      filteredData.values().forEach(trial => {
+          modifiedData.push({
+              subCode: trial.subCode,
+              trial_num: trial.trial_num,
+              word: trial.word,
+              dimension: trial.dimension,
+              filename: trial.filename,
+              action: trial.action,
+              rt: trial.rt,
+              description: trial.description
+          });
+      });
+      
+      // Return CSV string of the modified data
+      return modifiedData.csv();
+  },
+  success_callback: function() {
+      console.log('Data saved successfully to DataPipe!');
+      console.log('Participant ID:', participant_id);
+  },
+  error_callback: function(error) {
+      console.error('Error saving to DataPipe:', error);
+  }
 };
 
 const completion_code_trial = {
