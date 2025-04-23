@@ -209,27 +209,46 @@ var jsPsychVideoTextResponse = (function (jspsych) {
       
       // Variables to track state
       let videoCompleted = false;
+      let videoDuration = 0;
+      let videoPlayedOnce = false;
       let self = this; // Store this reference for callbacks
       
       // Function to check if button should be enabled
       function checkEnableButton() {
         // For required responses, need both video completion and text
         if (trial.required) {
-          submitButton.disabled = !(videoCompleted && textArea.value.trim() !== '');
+          submitButton.disabled = !(videoPlayedOnce && textArea.value.trim() !== '');
         } else {
           // If not required, just need video completion
-          submitButton.disabled = !videoCompleted;
+          submitButton.disabled = !videoPlayedOnce;
         }
         
-        console.log('Button state check: videoCompleted =', videoCompleted, 
+        console.log('Button state check: videoPlayedOnce =', videoPlayedOnce, 
                    'text =', textArea.value.trim(), 
                    'button disabled =', submitButton.disabled);
       }
       
-      // Listen for video ended event
+      // Get video duration when metadata is loaded
+      video_element.addEventListener('loadedmetadata', function() {
+        videoDuration = video_element.duration;
+        console.log('Video duration:', videoDuration);
+      });
+      
+      // Track video progress to detect first complete play
+      video_element.addEventListener('timeupdate', function() {
+        // If we're near the end of the video and haven't marked it as played once
+        if (!videoPlayedOnce && video_element.currentTime > 0 && 
+            videoDuration > 0 && videoDuration - video_element.currentTime < 0.5) {
+          console.log('Video has played through once');
+          videoPlayedOnce = true;
+          checkEnableButton();
+        }
+      });
+      
+      // Also handle ended event (for non-looping videos)
       video_element.addEventListener('ended', function() {
         console.log('Video ended event fired');
-        videoCompleted = true;
+        videoPlayedOnce = true;
         checkEnableButton();
       });
       
