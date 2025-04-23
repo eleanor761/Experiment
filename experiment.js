@@ -164,7 +164,15 @@ const save_data = {
                 <p>There was a problem saving your data. Please contact the researcher with this information:</p>
                 <p>Error: ${error.message || 'Unknown error'}</p>
                 <p>You can try refreshing the page to restart the experiment.</p>
+                <div id="data-display"></div>
             </div>
+        `;
+        
+        // Display data on screen in case of error
+        const relevantData = jsPsych.data.get().filter({trial_type: 'video-text-response'});
+        document.getElementById('data-display').innerHTML = `
+            <p>Collected data:</p>
+            <textarea style="width: 100%; height: 200px;">${jsPsych.data.dataAsCSV(relevantData)}</textarea>
         `;
     }
 };
@@ -219,48 +227,6 @@ async function loadTrials() {
     }
 }
 
-// Debug function to display data
-function debugDisplayData() {
-    // Get the data in the format we want to save
-    const relevantData = jsPsych.data.get().filter({trial_type: 'video-text-response'});
-    
-    // Format the data to match demo_data structure
-    const formattedData = relevantData.map(function(trial) {
-        return {
-            participant_id: participant_id,
-            trial_num: trial.trial_num,
-            count: trial.count,
-            type: trial.type,
-            dimension: trial.dimension,
-            filename: trial.filename,
-            action: trial.action,
-            RT: Math.round(trial.rt),
-            description: trial.response || ''
-        };
-    });
-    
-    // Display data on screen for debugging
-    const dataStr = jsPsych.data.dataAsCSV(formattedData);
-    
-    document.body.innerHTML = `
-        <div style="max-width: 90%; margin: 50px auto; padding: 20px; background: #f8f8f8; border-radius: 5px;">
-            <h2>Debug: Experiment Data</h2>
-            <p><strong>Participant ID:</strong> ${participant_id}</p>
-            <p>Copy the text below to save your data manually:</p>
-            <textarea style="width: 100%; height: 300px;">${dataStr}</textarea>
-        </div>
-    `;
-}
-
-// Fallback data saving trial in case jsPsychPipe fails
-const fallback_save = {
-    type: jsPsychCallFunction,
-    func: debugDisplayData,
-    on_load: function() {
-        console.log("Fallback data saving activated");
-    }
-};
-
 // Main function to run the experiment
 async function runExperiment() {
     try {
@@ -277,9 +243,7 @@ async function runExperiment() {
             preload,
             ...experimentTrials,
             save_data,
-            completion_screen,
-            // Uncomment the fallback_save if you're having issues with jsPsychPipe
-            // fallback_save
+            completion_screen
         ];
 
         // Run the experiment
