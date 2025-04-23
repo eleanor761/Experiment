@@ -129,6 +129,8 @@ var jsPsychVideoTextResponse = (function (jspsych) {
     }
 
     trial(display_element, trial) {
+      console.log('Starting video-text-response trial');
+      
       // Display the video stimulus
       let html = '<div id="jspsych-video-text-response-wrapper" style="margin: 0 auto;">';
       
@@ -193,10 +195,12 @@ var jsPsychVideoTextResponse = (function (jspsych) {
       
       display_element.innerHTML = html;
       
-      // Get video element
+      // Get video element after adding to DOM
       const video_element = display_element.querySelector('#jspsych-video-text-response-video');
       const textArea = display_element.querySelector('#jspsych-video-text-response-text');
       const submitButton = display_element.querySelector('#jspsych-video-text-response-next');
+      
+      console.log('DOM elements setup complete');
       
       // Set up video preload
       if (video_preload_blob) {
@@ -205,6 +209,7 @@ var jsPsychVideoTextResponse = (function (jspsych) {
       
       // Variables to track state
       let videoCompleted = false;
+      let self = this; // Store this reference for callbacks
       
       // Function to check if button should be enabled
       function checkEnableButton() {
@@ -216,7 +221,7 @@ var jsPsychVideoTextResponse = (function (jspsych) {
           submitButton.disabled = !videoCompleted;
         }
         
-        console.log('Checking button state: videoCompleted =', videoCompleted, 
+        console.log('Button state check: videoCompleted =', videoCompleted, 
                    'text =', textArea.value.trim(), 
                    'button disabled =', submitButton.disabled);
       }
@@ -230,11 +235,14 @@ var jsPsychVideoTextResponse = (function (jspsych) {
       
       // Listen for text input changes
       textArea.addEventListener('input', function() {
+        console.log('Text input changed: ', textArea.value);
         checkEnableButton();
       });
       
       // Function to end trial
-      const end_trial = () => {
+      function end_trial() {
+        console.log('End trial called');
+        
         const trial_data = {
           rt: performance.now() - start_time,
           stimulus: trial.stimulus,
@@ -244,21 +252,24 @@ var jsPsychVideoTextResponse = (function (jspsych) {
         };
         
         display_element.innerHTML = '';
-        this.jsPsych.finishTrial(trial_data);
-      };
+        self.jsPsych.finishTrial(trial_data);
+      }
       
       // Handle button click
       submitButton.addEventListener('click', end_trial);
       
       // Start timing
       var start_time = performance.now();
+      console.log('Trial started at:', start_time);
     }
   }
-  
+
+  VideoTextResponsePlugin.info = info;
+
   return VideoTextResponsePlugin;
 })(jsPsychModule);
 
-// This makes the plugin accessible to the experiment
+// This makes the plugin accessible to the experiment in jsPsych 7.x
 if (typeof jsPsychModule !== 'undefined') {
-  jsPsychModule.registerPlugin('video-text-response', jsPsychVideoTextResponse);
+  jsPsychModule.VideoTextResponsePlugin = jsPsychVideoTextResponse;
 }
