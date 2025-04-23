@@ -125,7 +125,7 @@ const save_data = {
   type: jsPsychPipe,
   action: "save",
   experiment_id: "DvojIUx5ETI3",
-  filename: `${workerId}.csv`,
+  filename: `${participant_id}.csv`,
   data_string: getFilteredData,
   success_callback: function() {
       console.log('Data saved successfully to DataPipe');
@@ -219,7 +219,7 @@ const completion_code_trial = {
       trial_type: 'completion'
   },
   on_finish: function() {
-      window.location.href = `https://uwmadison.co1.qualtrics.com/jfe/form/SV_a9GuS8KJgA1mJTg?completion_code=${completion_code}&workerId=${workerId}`;
+      window.location.href = `https://uwmadison.sona-systems.com/default.aspx?logout=Y`;
   }
 };
 
