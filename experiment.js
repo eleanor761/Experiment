@@ -59,64 +59,60 @@ function getVideoPath(stimName) {
     return `stimuli/norming/${stimName}`;
 }
 
+// Function to create trials from the CSV data
 function createTrials(trialsData) {
-  const experimentTrials = [];
-  
-  trialsData.forEach(trial => {
-      // Create video text response trial using our custom plugin
-      const videoResponseTrial = {
-          type: jsPsychVideoTextResponse,
-          stimulus: [getVideoPath(trial.filename)],
-          width: 640,
-          height: 480,
-          controls: true,
-          autoplay: true,
-          loop: true,  // Keep looping for the experiment
-          prompt: null, // No title
-          question_text: 'Please describe what you see in the video:',
-          placeholder: 'Type your response here...',
-          rows: 5,
-          columns: 60,
-          required: true,
-          show_response_during_video: true,
-          button_label: 'Submit',
-          // Store all the original trial data
-          data: {
-              trial_num: trial.trial_num,
-              count: trial.count,
-              type: trial.type,
-              dimension: trial.dimension,
-              filename: trial.filename,
-              action: trial.action,
-              participant_id: participant_id,
-              trial_type: 'video_with_response'
-          },
-          on_finish: function(data) {
-              // Transfer the response text to 'description' field to match demo_data format
-              data.description = data.response_text || data.response;
-              
-              // Calculate and record RT in the format you want
-              data.RT = Math.round(data.rt); // Round to integer if needed
-              
-              // Making sure all fields align with the demo_data format
-              data = {
-                  participant_id: participant_id,
-                  trial_num: trial.trial_num,
-                  count: trial.count,
-                  type: trial.type,
-                  dimension: trial.dimension,
-                  filename: trial.filename,
-                  action: trial.action,
-                  RT: data.RT,
-                  description: data.description
-              };
-          }
-      };
+    const experimentTrials = [];
+    
+    trialsData.forEach(trial => {
+        // Try different possible field names for the filename
+        const videoFile = trial.filename || trial.file_name || trial.video || trial.stimuli;
+        
+        if (!videoFile) {
+            console.warn('Trial missing filename field:', trial);
+            return;
+        }
+        
+        // Create video text response trial using our custom plugin
+        const videoResponseTrial = {
+            type: jsPsychVideoTextResponse,
+            stimulus: [getVideoPath(videoFile)],
+            width: 640,
+            height: 480,
+            controls: true,
+            autoplay: true,
+            loop: true,  // Keep looping for the experiment
+            prompt: null, // No title
+            question_text: 'Please describe what you see in the video:',
+            placeholder: 'Type your response here...',
+            rows: 5,
+            columns: 60,
+            required: true,
+            show_response_during_video: true,
+            button_label: 'Submit',
+            // Store all the original trial data
+            data: {
+                trial_num: trial.trial_num,
+                count: trial.count,
+                type: trial.type || 'unknown',
+                dimension: trial.dimension || '',
+                filename: videoFile,
+                action: trial.action || '',
+                participant_id: participant_id,
+                trial_type: 'video-text-response'
+            },
+            on_finish: function(data) {
+                // Transfer the response text to 'description' field to match demo_data format
+                data.description = data.response || '';
+                
+                // Calculate and record RT in the format you want
+                data.RT = Math.round(data.rt);
+            }
+        };
 
-      experimentTrials.push(videoResponseTrial);
-  });
-  
-  return experimentTrials;
+        experimentTrials.push(videoResponseTrial);
+    });
+    
+    return experimentTrials;
 }
 
 // Preload media files
@@ -125,27 +121,76 @@ const preload = {
     auto_preload: true
 };
 
-// Data saving configuration
+// Data saving configuration with error handling
 const save_data = {
-  type: jsPsychPipe, 
-  action: "save",
-  experiment_id: "DvojIUx5ETI3",
-  filename: function() {
-      return `${participant_id}_${filename}`;
-  },
-  data_string: function() {
-      // Get only the trial data that matches our expected format
-      const relevantData = jsPsych.data.get().filter({trial_type: 'video-text-response'});
-      
-      // Return formatted CSV
-      return relevantData.csv();
-  }
-}
+    type: jsPsychPipe, 
+    action: "save",
+    experiment_id: "DvojIUx5ETI3",
+    filename: function() {
+        return `${participant_id}_${new Date().toISOString().replace(/[:.]/g, "-")}.csv`;
+    },
+    data_string: function() {
+        // Get only the trial data that matches our expected format
+        const relevantData = jsPsych.data.get().filter({trial_type: 'video-text-response'});
+        
+        // Format the data to match demo_data structure
+        const formattedData = relevantData.map(function(trial) {
+            return {
+                participant_id: participant_id,
+                trial_num: trial.trial_num,
+                count: trial.count,
+                type: trial.type,
+                dimension: trial.dimension,
+                filename: trial.filename,
+                action: trial.action,
+                RT: Math.round(trial.rt),
+                description: trial.response || ''
+            };
+        });
+        
+        // Convert to CSV
+        return jsPsych.data.dataAsCSV(formattedData);
+    },
+    on_finish: function() {
+        // Called when data saving is complete
+        console.log("Data saving completed");
+    },
+    on_error: function(error) {
+        console.error("Error saving data:", error);
+        // Show error message to user
+        document.body.innerHTML = `
+            <div style="max-width: 800px; margin: 50px auto; padding: 20px; background: #f8f8f8; border-radius: 5px;">
+                <h2>Data Saving Error</h2>
+                <p>There was a problem saving your data. Please contact the researcher with this information:</p>
+                <p>Error: ${error.message || 'Unknown error'}</p>
+                <p>You can try refreshing the page to restart the experiment.</p>
+            </div>
+        `;
+    }
+};
+
+// Final screen after data saving
+const completion_screen = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: `
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h2>Thank you for participating!</h2>
+            <p>Your responses have been recorded.</p>
+            <p>You may now close this window.</p>
+        </div>
+    `,
+    choices: "NO_KEYS",
+    trial_duration: 5000,
+    on_finish: function() {
+        // Optionally redirect to another page
+        // window.location.href = "completion_page.html";
+    }
+};
 
 // Function to load trials from CSV
 async function loadTrials() {
     try {
-        const csvFilename = 'demo_trials.csv'; // Path to your trials file, will need to update once all videos are done
+        const csvFilename = 'demo_trials.csv'; // Path to your trials file
         
         const response = await fetch(csvFilename);
         const csvText = await response.text();
@@ -174,6 +219,48 @@ async function loadTrials() {
     }
 }
 
+// Debug function to display data
+function debugDisplayData() {
+    // Get the data in the format we want to save
+    const relevantData = jsPsych.data.get().filter({trial_type: 'video-text-response'});
+    
+    // Format the data to match demo_data structure
+    const formattedData = relevantData.map(function(trial) {
+        return {
+            participant_id: participant_id,
+            trial_num: trial.trial_num,
+            count: trial.count,
+            type: trial.type,
+            dimension: trial.dimension,
+            filename: trial.filename,
+            action: trial.action,
+            RT: Math.round(trial.rt),
+            description: trial.response || ''
+        };
+    });
+    
+    // Display data on screen for debugging
+    const dataStr = jsPsych.data.dataAsCSV(formattedData);
+    
+    document.body.innerHTML = `
+        <div style="max-width: 90%; margin: 50px auto; padding: 20px; background: #f8f8f8; border-radius: 5px;">
+            <h2>Debug: Experiment Data</h2>
+            <p><strong>Participant ID:</strong> ${participant_id}</p>
+            <p>Copy the text below to save your data manually:</p>
+            <textarea style="width: 100%; height: 300px;">${dataStr}</textarea>
+        </div>
+    `;
+}
+
+// Fallback data saving trial in case jsPsychPipe fails
+const fallback_save = {
+    type: jsPsychCallFunction,
+    func: debugDisplayData,
+    on_load: function() {
+        console.log("Fallback data saving activated");
+    }
+};
+
 // Main function to run the experiment
 async function runExperiment() {
     try {
@@ -189,7 +276,10 @@ async function runExperiment() {
             instructions,
             preload,
             ...experimentTrials,
-            save_data
+            save_data,
+            completion_screen,
+            // Uncomment the fallback_save if you're having issues with jsPsychPipe
+            // fallback_save
         ];
 
         // Run the experiment
