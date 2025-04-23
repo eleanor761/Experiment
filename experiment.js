@@ -4,7 +4,8 @@ let participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
 // Initialize jsPsych
 const jsPsych = new jsPsychModule.JsPsych({
   show_progress_bar: true,
-  auto_update_progress_bar: false
+  auto_update_progress_bar: false,
+  override_safe_mode: true
 });
 
 // Create a random filename for data saving
