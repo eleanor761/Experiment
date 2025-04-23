@@ -155,8 +155,8 @@ function getFilteredData() {
       dimension: trial.dimension,
       filename: trial.filename,
       action: trial.action,
-      rt: Math.round(data.rt),
-      description: data.response
+      rt: trial.rt,
+      description:trial.response
       
   }));
 
