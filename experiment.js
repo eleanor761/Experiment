@@ -138,38 +138,36 @@ const preload = {
 
 // Function to filter and format data for saving
 function getFilteredData() {
-  // Get all data
-  const allData = jsPsych.data.get().filter({'trial_type': 'video-text-response'}).values();
+  // Get all video-text-response trials
+  let allData = jsPsych.data.get().filter({'trial_type': 'video-text-response'});
   
   // Log the data that will be saved
-  console.log('Data being prepared for saving:', allData);
-  console.log('Number of trials to save:', allData.length);
+  console.log('Data being prepared for saving:', allData.values());
+  console.log('Number of trials to save:', allData.count());
   
   // Handle empty data case
-  if (allData.length === 0) {
+  if (allData.count() === 0) {
     console.error('No video-text-response trials found in data');
     return 'subCode,trial_num,word,dimension,filename,action,rt,description\n';
   }
   
-  // Create a custom CSV with only the columns we want
-  const requiredColumns = ['subCode', 'trial_num', 'word', 'dimension', 'filename', 'action', 'rt', 'description'];
+  // Filter out the unwanted columns
+  const columnsToExclude = ['stimulus', 'response', 'response_text', 'trial_index', 'time_elapsed', 'internal_node_id'];
   
-  // Create CSV header
-  let csvData = requiredColumns.join(',') + '\n';
+  // Create a modified dataset with only the columns we want
+  let filteredData = allData.clone();
   
-  // Add each row with only the required columns
-  allData.forEach(trial => {
-    const row = requiredColumns.map(col => {
-      // Handle special cases like commas in text fields
-      if (typeof trial[col] === 'string' && trial[col].includes(',')) {
-        return `"${trial[col].replace(/"/g, '""')}"`;  // Escape quotes in CSV
+  // Remove unwanted columns from each trial
+  filteredData.values().forEach(trial => {
+    columnsToExclude.forEach(col => {
+      if (trial.hasOwnProperty(col)) {
+        delete trial[col];
       }
-      return trial[col];
-    }).join(',');
-    
-    csvData += row + '\n';
+    });
   });
   
+  // Convert to CSV
+  const csvData = filteredData.csv();
   console.log('CSV data prepared (first 200 chars):', csvData.substring(0, 200) + '...');
   
   return csvData;
@@ -185,6 +183,11 @@ const save_data = {
       console.log('getFilteredData() called by jsPsychPipe');
       const data = getFilteredData();
       console.log('Data string length:', data.length);
+      
+      // Extra logging for debugging
+      console.log('First 500 characters of data:');
+      console.log(data.substring(0, 500));
+      
       return data;
   },
   success_callback: function() {
