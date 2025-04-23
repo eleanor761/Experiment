@@ -136,48 +136,6 @@ const preload = {
     auto_preload: true
 };
 
-// Function to filter and format data for saving
-function getFilteredData() {
-    const allData = jsPsych.data.get().values();
-    
-    // Filter video-text-response trials
-    const responseTrials = allData.filter(trial => 
-        trial.trial_type === 'video-text-response'
-    );
-    
-    // Map to array of objects with only the fields we want
-    const formattedData = responseTrials.map(trial => ({
-        subCode: trial.subCode,
-        trial_num: trial.trial_num,
-        word: trial.word,
-        dimension: trial.dimension,
-        filename: trial.filename,
-        action: trial.action,
-        rt: trial.rt,
-        description: trial.description
-    }));
-
-    // Convert to CSV string manually to ensure proper formatting
-    if (formattedData.length === 0) {
-        console.error('No video-text-response trials found in data');
-        return 'subCode,trial_num,word,dimension,filename,action,rt,description\n';
-    }
-    
-    const headers = Object.keys(formattedData[0]).join(',');
-    const rows = formattedData.map(trial => 
-        Object.values(trial).map(value => {
-            if (typeof value === 'string' && value.includes(',')) {
-                return `"${value.replace(/"/g, '""')}"`;  // Escape quotes in CSV
-            }
-            return value;
-        }).join(',')
-    );
-    
-    const csvData = headers + '\n' + rows.join('\n');
-    console.log('CSV data prepared (first 200 chars):', csvData.substring(0, 200) + '...');
-    
-    return csvData;
-}
 
 // Function to filter and format data for saving
 function getFilteredData() {
