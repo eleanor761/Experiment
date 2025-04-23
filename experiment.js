@@ -139,39 +139,57 @@ const preload = {
 
 // Function to filter and format data for saving
 function getFilteredData() {
+  // First, let's log what data we're working with
+  console.log("All data:", jsPsych.data.get().values());
+  
   // Get all data and filter to only video-text-response trials
-  const trials = jsPsych.data.get().filter({trial_type: 'video-text-response'}).values();
+  const allTrials = jsPsych.data.get().values();
+  const trials = allTrials.filter(trial => trial.trial_type === 'video-text-response');
+  
+  console.log("Filtered trials:", trials);
   
   // If there's no data, return empty string
   if (trials.length === 0) {
+      console.error("No video-text-response trials found!");
       return '';
   }
   
-  // Define the columns we want to keep
-  const columns = ['subCode', 'trial_num', 'word', 'dimension', 'filename', 'action', 'rt', 'description'];
-  
-  // Create header row
-  const header = columns.join(',');
-  
-  // Create data rows with only the columns we want
-  const rows = trials.map(trial => {
-      return columns.map(column => {
-          const value = trial[column];
-          if (value === null || value === undefined) {
-              return '';
-          } else if (typeof value === 'string') {
-              // Properly escape string values for CSV
-              return `"${value.replace(/"/g, '""')}"`;
-          } else {
-              return value;
-          }
-      }).join(',');
-  });
-  
-  // Combine header and rows
-  return header + '\n' + rows.join('\n');
+  try {
+      // Define the columns we want to keep
+      const columns = ['subCode', 'trial_num', 'word', 'dimension', 'filename', 'action', 'rt', 'description'];
+      
+      // Create header row
+      const header = columns.join(',');
+      
+      // Create data rows with only the columns we want
+      const rows = trials.map(trial => {
+          return columns.map(column => {
+              const value = trial[column];
+              console.log(`Column ${column} value:`, value, typeof value);
+              
+              if (value === null || value === undefined) {
+                  return '';
+              } else if (typeof value === 'string') {
+                  // Properly escape string values for CSV
+                  return `"${value.replace(/"/g, '""')}"`;
+              } else {
+                  return value;
+              }
+          }).join(',');
+      });
+      
+      // Combine header and rows
+      const finalCSV = header + '\n' + rows.join('\n');
+      console.log("Final CSV data:", finalCSV);
+      
+      return finalCSV;
+  } catch (error) {
+      console.error("Error in getFilteredData:", error);
+      // Return a simple valid CSV as fallback
+      const fallbackCSV = "subCode,error\n\"error\",\"" + error.message + "\"";
+      return fallbackCSV;
+  }
 }
-
 // Configure data saving
 const save_data = {
     type: jsPsychPipe,
