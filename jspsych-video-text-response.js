@@ -1,10 +1,10 @@
 /**
-* jspsych-video-text-response
-* A jsPsych plugin for displaying a video stimulus and collecting a text response
-*/
+ * jspsych-video-text-response
+ * A jsPsych plugin for displaying a video stimulus and collecting a text response
+ */
 var jsPsychVideoTextResponse = (function (jspsych) {
   'use strict';
-  
+
   const info = {
     name: 'video-text-response',
     parameters: {
@@ -117,38 +117,38 @@ var jsPsychVideoTextResponse = (function (jspsych) {
       }
     }
   };
-  
+
   /**
-  * **video-text-response**
-  * 
-  * A plugin for displaying a video stimulus and collecting a text response
-  */
+   * **video-text-response**
+   * 
+   * A plugin for displaying a video stimulus and collecting a text response
+   */
   class VideoTextResponsePlugin {
     constructor(jsPsych) {
       this.jsPsych = jsPsych;
     }
-  
+
     trial(display_element, trial) {
       // Display the video stimulus
       let html = '<div id="jspsych-video-text-response-wrapper" style="margin: 0 auto;">';
       
-      // Add prompt if there is one and it's not a title
+      // Skip the Video X title prompt
       if (trial.prompt !== null && !trial.prompt.includes('Video')) {
         html += `<div id="jspsych-video-text-response-prompt">${trial.prompt}</div>`;
       }
-  
+
       // Display the video
       html += '<div id="jspsych-video-text-response-stimulus">';
       html += '<video id="jspsych-video-text-response-video" width="' + trial.width + '" height="' + trial.height + '"';
       
       if(trial.autoplay){
-        html += " autoplay muted ";
+        html += " autoplay";
       }
       if(trial.loop){
-        html += " loop ";
+        html += " loop";
       }
       if(trial.controls){
-        html += " controls ";
+        html += " controls";
       }
       html += ">";
       
@@ -174,11 +174,7 @@ var jsPsychVideoTextResponse = (function (jspsych) {
       html += "</div>";
       
       // Add response elements
-      html += '<div id="jspsych-video-text-response-response-area"';
-      if (!trial.show_response_during_video) {
-        html += ' style="display:none;"';
-      }
-      html += '>';
+      html += '<div id="jspsych-video-text-response-response-area">';
       
       // Add question text
       html += `<p class="jspsych-video-text-response-question">${trial.question_text}</p>`;
@@ -186,126 +182,83 @@ var jsPsychVideoTextResponse = (function (jspsych) {
       // Add text area
       html += '<textarea name="response" id="jspsych-video-text-response-text" cols="' + 
         trial.columns + '" rows="' + trial.rows + '" placeholder="' + 
-        trial.placeholder + '"';
+        trial.placeholder + '"></textarea>';
       
-      if (trial.required && !trial.show_response_during_video) {
-        html += ' required';
-      }
-      
-      html += '></textarea>';
-      
-      // Add submit button
-      html += '<button id="jspsych-video-text-response-next" class="jspsych-btn"';
-      if (trial.required) {
-        html += ' disabled';
-      }
-      html += '>' + trial.button_label + '</button>';
+      // Add submit button - always disabled initially
+      html += '<button id="jspsych-video-text-response-next" class="jspsych-btn" disabled>' + 
+        trial.button_label + '</button>';
       
       html += '</div>';
       html += '</div>';
       
       display_element.innerHTML = html;
       
-      // Now get video element AFTER adding to DOM
+      // Get video element
       const video_element = display_element.querySelector('#jspsych-video-text-response-video');
-      
-      // Video playback tracking
-      let videoPlayed = false;
-      let videoComplete = false;
+      const textArea = display_element.querySelector('#jspsych-video-text-response-text');
+      const submitButton = display_element.querySelector('#jspsych-video-text-response-next');
       
       // Set up video preload
       if (video_preload_blob) {
         video_element.src = video_preload_blob;
       }
       
-      // Response validation logic
-      if (trial.required) {
-        const textArea = document.getElementById('jspsych-video-text-response-text');
-        const nextButton = document.getElementById('jspsych-video-text-response-next');
+      // Variables to track state
+      let videoCompleted = false;
+      
+      // Function to check if button should be enabled
+      function checkEnableButton() {
+        // For required responses, need both video completion and text
+        if (trial.required) {
+          submitButton.disabled = !(videoCompleted && textArea.value.trim() !== '');
+        } else {
+          // If not required, just need video completion
+          submitButton.disabled = !videoCompleted;
+        }
         
-        // Function to check if response is valid
-        const checkResponseValid = function() {
-          // Only enable button if both conditions are met:
-          // 1. Video has completed playing at least once
-          // 2. There is text in the text area
-          nextButton.disabled = !videoComplete || textArea.value.trim() === '';
-        };
-        
-        // Check validity whenever text changes
-        textArea.addEventListener('input', checkResponseValid);
-        
-        // Also check validity when video ends
-        video_element.addEventListener('ended', function() {
-          videoPlayed = true;
-          videoComplete = true;
-          console.log("Video has completed playing");
-          
-          // Show response area if it was hidden
-          if (!trial.show_response_during_video) {
-            setTimeout(() => {
-              document.getElementById('jspsych-video-text-response-response-area').style.display = 'block';
-              checkResponseValid();
-            }, trial.time_after_video);
-          } else {
-            checkResponseValid();
-          }
-        });
-      } else {
-        // If response not required, just handle video end
-        video_element.addEventListener('ended', function() {
-          videoPlayed = true;
-          videoComplete = true;
-          
-          // Show response area if it was hidden
-          if (!trial.show_response_during_video) {
-            setTimeout(() => {
-              document.getElementById('jspsych-video-text-response-response-area').style.display = 'block';
-            }, trial.time_after_video);
-          }
-          
-          // Enable button only when video is complete
-          document.getElementById('jspsych-video-text-response-next').disabled = false;
-        });
+        console.log('Checking button state: videoCompleted =', videoCompleted, 
+                   'text =', textArea.value.trim(), 
+                   'button disabled =', submitButton.disabled);
       }
       
-      let trial_complete = false;
+      // Listen for video ended event
+      video_element.addEventListener('ended', function() {
+        console.log('Video ended event fired');
+        videoCompleted = true;
+        checkEnableButton();
+      });
+      
+      // Listen for text input changes
+      textArea.addEventListener('input', function() {
+        checkEnableButton();
+      });
       
       // Function to end trial
       const end_trial = () => {
-        // Only execute if trial not already complete
-        if (trial_complete) return;
-        trial_complete = true;
-        
-        // Gather data
         const trial_data = {
           rt: performance.now() - start_time,
           stimulus: trial.stimulus,
-          response: display_element.querySelector('#jspsych-video-text-response-text').value,
-          response_text: display_element.querySelector('#jspsych-video-text-response-text').value,
+          response: textArea.value,
+          response_text: textArea.value,
           trial_type: 'video-text-response'
         };
         
-        // Clear display
         display_element.innerHTML = '';
-        
-        // End trial
         this.jsPsych.finishTrial(trial_data);
       };
       
       // Handle button click
-      display_element.querySelector('#jspsych-video-text-response-next').addEventListener('click', end_trial);
+      submitButton.addEventListener('click', end_trial);
       
       // Start timing
       var start_time = performance.now();
     }
   }
   
-  VideoTextResponsePlugin.info = info;
-  
   return VideoTextResponsePlugin;
-  })(jsPsychModule);
-  
-  // This makes the plugin accessible to the experiment
-  if (typeof jsPsychModule !== 'undefined') {
-    var jsPsychVideoTextResponse = jsPsychModule.registerPlugin('video-text-response', VideoTextResponsePlugin);
-  }
+})(jsPsychModule);
+
+// This makes the plugin accessible to the experiment
+if (typeof jsPsychModule !== 'undefined') {
+  jsPsychModule.registerPlugin('video-text-response', jsPsychVideoTextResponse);
+}
