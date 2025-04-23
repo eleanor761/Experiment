@@ -65,7 +65,7 @@ function createTrials(trialsData) {
     
     trialsData.forEach(trial => {
         // Try different possible field names for the filename
-        const videoFile = trial.filename || trial.file_name || trial.video || trial.stimuli;
+        const videoFile = trial.filename;
         
         if (!videoFile) {
             console.warn('Trial missing filename field:', trial);
@@ -153,7 +153,7 @@ function getFilteredData() {
       trial_num: trial.trial_num,
       word: trial.word,
       dimension: trial.dimension,
-      filename: videoFile,
+      filename: trial.filename,
       action: trial.action,
       rt: Math.round(data.rt),
       description: data.response
