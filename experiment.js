@@ -137,15 +137,39 @@ const preload = {
 };
 
 
+// Function to filter and format data for saving
 function getFilteredData() {
-  // Filter to only video-text-response trials
-  const responseTrials = jsPsych.data.get().filter({trial_type: 'video-text-response'});
+  // Get all data and filter to only video-text-response trials
+  const trials = jsPsych.data.get().filter({trial_type: 'video-text-response'}).values();
   
-  // Select only the fields you want
-  const formattedData = responseTrials.select(['subCode', 'trial_num', 'word', 'dimension', 'filename', 'action', 'rt', 'description']);
+  // If there's no data, return empty string
+  if (trials.length === 0) {
+      return '';
+  }
   
-  // Use the built-in CSV converter
-  return formattedData.csv();
+  // Define the columns we want to keep
+  const columns = ['subCode', 'trial_num', 'word', 'dimension', 'filename', 'action', 'rt', 'description'];
+  
+  // Create header row
+  const header = columns.join(',');
+  
+  // Create data rows with only the columns we want
+  const rows = trials.map(trial => {
+      return columns.map(column => {
+          const value = trial[column];
+          if (value === null || value === undefined) {
+              return '';
+          } else if (typeof value === 'string') {
+              // Properly escape string values for CSV
+              return `"${value.replace(/"/g, '""')}"`;
+          } else {
+              return value;
+          }
+      }).join(',');
+  });
+  
+  // Combine header and rows
+  return header + '\n' + rows.join('\n');
 }
 
 // Configure data saving
