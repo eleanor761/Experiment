@@ -137,36 +137,15 @@ const preload = {
 };
 
 
-// Function to filter and format data for saving
 function getFilteredData() {
-    const allData = jsPsych.data.get().values();
-    
-    // Filter to only video-text-response trials
-    const responseTrials = allData.filter(trial => 
-        trial.trial_type === 'video-text-response'
-    );
-    
-    // Map to array of objects with only the fields we want
-    const formattedData = responseTrials.map(trial => ({
-        subCode: trial.subCode,
-        trial_num: trial.trial_num,
-        word: trial.word,
-        dimension: trial.dimension,
-        filename: trial.filename,
-        action: trial.action,
-        rt: trial.rt,
-        description: trial.description
-    }));
-
-    // Convert to CSV string manually to ensure proper formatting
-    const headers = Object.keys(formattedData[0]).join(',');
-    const rows = formattedData.map(trial => 
-        Object.values(trial).map(value => 
-            typeof value === 'string' ? `"${value}"` : value
-        ).join(',')
-    );
-    
-    return headers + '\n' + rows.join('\n');
+  // Filter to only video-text-response trials
+  const responseTrials = jsPsych.data.get().filter({trial_type: 'video-text-response'});
+  
+  // Select only the fields you want
+  const formattedData = responseTrials.select(['subCode', 'trial_num', 'word', 'dimension', 'filename', 'action', 'rt', 'description']);
+  
+  // Use the built-in CSV converter
+  return formattedData.csv();
 }
 
 // Configure data saving
