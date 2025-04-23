@@ -91,21 +91,19 @@ function createTrials(trialsData) {
             button_label: 'Submit',
             // Store all the original trial data
             data: {
+                subCode: participant_id,
                 trial_num: trial.trial_num,
-                count: trial.count,
-                type: trial.type || 'unknown',
-                dimension: trial.dimension || '',
+                word: trial.word,
+                dimension: trial.dimension,
                 filename: videoFile,
-                action: trial.action || '',
-                participant_id: participant_id,
+                action: trial.action,
                 trial_type: 'video-text-response'
             },
             on_finish: function(data) {
-                // Transfer the response text to 'description' field to match demo_data format
-                data.description = data.response || '';
+                data.rt = Math.round(data.rt);
+                data.description = data.response
                 
                 // Calculate and record RT in the format you want
-                data.RT = Math.round(data.rt);
             }
         };
 
@@ -121,79 +119,58 @@ const preload = {
     auto_preload: true
 };
 
-// Data saving configuration with error handling
+
+// Configure data saving
 const save_data = {
-    type: jsPsychPipe, 
-    action: "save",
-    experiment_id: "DvojIUx5ETI3",
-    filename: function() {
-        return `${participant_id}_${new Date().toISOString().replace(/[:.]/g, "-")}.csv`;
-    },
-    data_string: function() {
-        // Get only the trial data that matches our expected format
-        const relevantData = jsPsych.data.get().filter({trial_type: 'video-text-response'});
-        
-        // Format the data to match demo_data structure
-        const formattedData = relevantData.map(function(trial) {
-            return {
-                participant_id: participant_id,
-                trial_num: trial.trial_num,
-                count: trial.count,
-                type: trial.type,
-                dimension: trial.dimension,
-                filename: trial.filename,
-                action: trial.action,
-                RT: Math.round(trial.rt),
-                description: trial.response || ''
-            };
-        });
-        
-        // Convert to CSV
-        return jsPsych.data.dataAsCSV(formattedData);
-    },
-    on_finish: function() {
-        // Called when data saving is complete
-        console.log("Data saving completed");
-    },
-    on_error: function(error) {
-        console.error("Error saving data:", error);
-        // Show error message to user
-        document.body.innerHTML = `
-            <div style="max-width: 800px; margin: 50px auto; padding: 20px; background: #f8f8f8; border-radius: 5px;">
-                <h2>Data Saving Error</h2>
-                <p>There was a problem saving your data. Please contact the researcher with this information:</p>
-                <p>Error: ${error.message || 'Unknown error'}</p>
-                <p>You can try refreshing the page to restart the experiment.</p>
-                <div id="data-display"></div>
-            </div>
-        `;
-        
-        // Display data on screen in case of error
-        const relevantData = jsPsych.data.get().filter({trial_type: 'video-text-response'});
-        document.getElementById('data-display').innerHTML = `
-            <p>Collected data:</p>
-            <textarea style="width: 100%; height: 200px;">${jsPsych.data.dataAsCSV(relevantData)}</textarea>
-        `;
-    }
+  type: jsPsychPipe,
+  action: "save",
+  experiment_id: "DvojIUx5ETI3",
+  filename: `${workerId}.csv`,
+  data_string: getFilteredData,
+  success_callback: function() {
+      console.log('Data saved successfully to DataPipe');
+      jsPsych.data.addProperties({
+          completed: true
+      });
+  },
+  error_callback: function(error) {
+      console.error('Error saving to DataPipe:', error);
+  }
 };
 
-// Final screen after data saving
-const completion_screen = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: `
-        <div style="max-width: 800px; margin: 0 auto;">
-            <h2>Thank you for participating!</h2>
-            <p>Your responses have been recorded.</p>
-            <p>You may now close this window.</p>
-        </div>
-    `,
-    choices: "NO_KEYS",
-    trial_duration: 5000,
-    on_finish: function() {
-        // Optionally redirect to another page
-        // window.location.href = "completion_page.html";
-    }
-};
+// Function to filter and format data for saving
+function getFilteredData() {
+  const allData = jsPsych.data.get().values();
+  
+  // Filter choice trials
+  const choiceTrials = allData.filter(trial => 
+      trial.trial_type === 'video-text-response'
+  );
+  
+  // Map to array of objects with specific field order
+  const formattedData = choiceTrials.map(trial => ({
+      subCode: participant_id,
+      trial_num: trial.trial_num,
+      word: trial.word,
+      dimension: trial.dimension,
+      filename: videoFile,
+      action: trial.action,
+      rt: Math.round(data.rt),
+      description: data.response
+      
+  }));
+
+  // Convert to CSV string manually to ensure proper formatting
+  const headers = Object.keys(formattedData[0]).join(',');
+  const rows = formattedData.map(trial => 
+      Object.values(trial).map(value => 
+          typeof value === 'string' ? `"${value}"` : value
+      ).join(',')
+  );
+  
+  return headers + '\n' + rows.join('\n');
+}
+
 
 // Function to load trials from CSV
 async function loadTrials() {
@@ -227,6 +204,26 @@ async function loadTrials() {
     }
 }
 
+const completion_code_trial = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: function() {
+      return `
+          <p>You have completed the main experiment!</p>
+          <p>Your completion code is: <strong>${completion_code}</strong></p>
+          <p>Please make a note of this code - you will need to enter it in MTurk to receive payment.</p>
+          <p>Click the button below to continue to a brief survey.</p>
+      `;
+  },
+  choices: ['Continue to Survey'],
+  data: {
+      trial_type: 'completion'
+  },
+  on_finish: function() {
+      window.location.href = `https://uwmadison.co1.qualtrics.com/jfe/form/SV_a9GuS8KJgA1mJTg?completion_code=${completion_code}&workerId=${workerId}`;
+  }
+};
+
+
 // Main function to run the experiment
 async function runExperiment() {
     try {
@@ -242,8 +239,7 @@ async function runExperiment() {
             instructions,
             preload,
             ...experimentTrials,
-            save_data,
-            completion_screen
+            save_data
         ];
 
         // Run the experiment
