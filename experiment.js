@@ -220,13 +220,15 @@ const save_data = {
     }
 };
 
+
+let sona_id = jsPsych.data.urlVariables()['sona_id']
+
+
 const completion_code_trial = {
   type: jsPsychHtmlButtonResponse,
   stimulus: function() {
       return `
           <p>You have completed the main experiment!</p>
-          <p>Your completion code is: <strong>${completion_code}</strong></p>
-          <p>Please make a note of this code - you will need to enter it in SONA to receive credit.</p>
           <p>You can close the page now.</p>
       `;
   },
@@ -235,8 +237,8 @@ const completion_code_trial = {
       trial_type: 'completion'
   },
   on_finish: function() {
-      window.location.href = `https://uwmadison.sona-systems.com/default.aspx?logout=Y`;
-  }
+      window.location.href = window.location.assign("https://uwmadison.sona-systems.com/webstudy_credit.aspx?experiment_id=2206&credit_token=3515823f040b4ed28ecdd4d9bf16e48a&survey_code="+sona_id)
+  },
 };
 
 // Main function to run the experiment
