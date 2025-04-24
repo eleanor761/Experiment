@@ -139,14 +139,14 @@ const preload = {
 
 // Function to filter and format data for saving
 function getFilteredData() {
-  // First, let's log what data we're working with
-  console.log("All data:", jsPsych.data.get().values());
+  //let's log what data we're working with
+  //console.log("All data:", jsPsych.data.get().values());
   
   // Get all data and filter to only video-text-response trials
   const allTrials = jsPsych.data.get().values();
   const trials = allTrials.filter(trial => trial.trial_type === 'video-text-response');
   
-  console.log("Filtered trials:", trials);
+  //console.log("Filtered trials:", trials);
   
   // If there's no data, return empty string
   if (trials.length === 0) {
