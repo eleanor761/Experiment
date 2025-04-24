@@ -1,11 +1,11 @@
-trial_num,count,type,dimension,filename,action
-1,1,batent,initial,batent1.mp4,straighten frame
-2,1,cabush,initial,cabush1.mp4,align books
-3,1,fremple,initial,fremple1.mp4,cut square
-4,1,joicate,initial,joicate1.mp4,seal envelope
-5,1,lorice,initial,lorice1.mp4,pot to stove
-6,1,nulmut,initial,nulmut1.mp4,hang coat
-7,1,pulact,initial,pulact1.mp4,rip paper
-8,1,punson,initial,punson1.mp4,cut to container
-9,1,samode,initial,samode1.mp4,cover candle
-10,1,traimin,initial,traimin1.mp4,hole in pile
+trial_num,count,word,dimension,filename,action
+1,1,batent,initial,batent1.mp4,straighten_frame
+2,1,cabush,initial,cabush1.mp4,align_books
+3,1,fremple,initial,fremple1.mp4,cut_square
+4,1,joicate,initial,joicate1.mp4,seal_envelope
+5,1,lorice,initial,lorice1.mp4,pot_to_stove
+6,1,nulmut,initial,nulmut1.mp4,hang_coat
+7,1,pulact,initial,pulact1.mp4,rip_paper
+8,1,punson,initial,punson1.mp4,cut_to_container
+9,1,samode,initial,samode1.mp4,cover_candle
+10,1,traimin,initial,traimin1.mp4,hole_i_ pile

@@ -1,11 +1,20 @@
 // Generate participant ID at the start
 let participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
+const completion_code = generateRandomString(3) + 'zvz' + generateRandomString(3);
+
+// Function to generate a random string of specified length
+function generateRandomString(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
 
 // Initialize jsPsych
 const jsPsych = new jsPsychModule.JsPsych({
-  show_progress_bar: true,
-  auto_update_progress_bar: false,
-  override_safe_mode: true
+  show_progress_bar: false
 });
 
 // Create a random filename for data saving
@@ -56,80 +65,70 @@ const instructions = {
     `,
 };
 
-// Text response after video
-const responseTextTrial = {
-    type: jsPsychSurveyText,
-    questions: [
-        {
-            prompt: 'Please describe what you saw in the video:', 
-            required: true,
-            rows: 5,
-            columns: 60
-        }
-    ],
-    data: {
-        trial_type: 'response',
-        video_id: 'batent1',
-        subCode: participant_id
-    }
-};
-
 // Function to get video path from filename
 function getVideoPath(stimName) {
     return `stimuli/norming/${stimName}`;
 }
 
+// Function to create trials from the CSV data
 function createTrials(trialsData) {
     const experimentTrials = [];
     
     trialsData.forEach(trial => {
         // Try different possible field names for the filename
-        const videoFile = trial.filename || trial.file_name || trial.video || trial.stimuli;
+        const videoFile = trial.filename;
         
         if (!videoFile) {
             console.warn('Trial missing filename field:', trial);
             return;
         }
         
-        // Create combined video and text response trial
-        const combinedTrial = {
-            type: jsPsychHtmlButtonResponse,
-            stimulus: function() {
-                const videoPath = getVideoPath(videoFile);
-                return `
-                    <div style="display: flex; flex-direction: column; align-items: center;">
-                        <video id="jspsych-video" width="640" height="480" controls autoplay loop>
-                            <source src="${videoPath}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                        <div style="margin-top: 20px; width: 80%;">
-                            <p><strong>Please describe what you see in the video:</strong></p>
-                            <textarea id="response-text" rows="5" style="width: 100%; padding: 10px;"></textarea>
-                        </div>
-                    </div>
-                `;
-            },
-            choices: ['Submit'],
+        // Create video text response trial using our custom plugin
+        const videoResponseTrial = {
+            type: jsPsychVideoTextResponse,
+            stimulus: [getVideoPath(videoFile)],
+            width: 640,
+            height: 480,
+            controls: true,
+            autoplay: true,
+            loop: true,  // Keep looping for the experiment
+            prompt: null, // No title
+            question_text: 'Please describe what you see in the video:',
+            placeholder: 'Type your response here...',
+            rows: 5,
+            columns: 60,
+            required: true,
+            show_response_during_video: true,
+            button_label: 'Submit',
+            // Store all the original trial data
             data: {
-                video_id: videoFile,
-                trial_num: trial.trial_num,
-                type: trial.type || 'unknown',
                 subCode: participant_id,
-                trial_type: 'video_with_response'
+                trial_num: trial.trial_num,
+                word: trial.word,
+                dimension: trial.dimension,
+                filename: videoFile,
+                action: trial.action,
+                trial_type: 'video-text-response'
             },
             on_finish: function(data) {
-                // Get the text response and save it
-                const responseText = document.getElementById('response-text').value;
-                data.response_text = responseText;
+                data.rt = Math.round(data.rt);
+                data.description = data.response;
+                
+                // Log the trial data after each trial
+                console.log(`Trial ${data.trial_num} completed. Response recorded:`, {
+                    trial_num: data.trial_num,
+                    word: data.word,
+                    rt: data.rt,
+                    description: data.description
+                });
             }
         };
 
-        experimentTrials.push(combinedTrial);
+        experimentTrials.push(videoResponseTrial);
     });
     
     return experimentTrials;
 }
-
 
 // Preload media files
 const preload = {
@@ -137,19 +136,163 @@ const preload = {
     auto_preload: true
 };
 
-// Data saving configuration
+
+// Function to filter and format data for saving
+function getFilteredData() {
+  // First, let's log what data we're working with
+  console.log("All data:", jsPsych.data.get().values());
+  
+  // Get all data and filter to only video-text-response trials
+  const allTrials = jsPsych.data.get().values();
+  const trials = allTrials.filter(trial => trial.trial_type === 'video-text-response');
+  
+  console.log("Filtered trials:", trials);
+  
+  // If there's no data, return empty string
+  if (trials.length === 0) {
+      console.error("No video-text-response trials found!");
+      return '';
+  }
+  
+  try {
+      // Define the columns we want to keep
+      const columns = ['subCode', 'trial_num', 'word', 'dimension', 'filename', 'action', 'rt', 'description'];
+      
+      // Create header row
+      const header = columns.join(',');
+      
+      // Create data rows with only the columns we want
+      const rows = trials.map(trial => {
+          return columns.map(column => {
+              const value = trial[column];
+              console.log(`Column ${column} value:`, value, typeof value);
+              
+              if (value === null || value === undefined) {
+                  return '';
+              } else if (typeof value === 'string') {
+                  // Properly escape string values for CSV
+                  return `"${value.replace(/"/g, '""')}"`;
+              } else {
+                  return value;
+              }
+          }).join(',');
+      });
+      
+      // Combine header and rows
+      const finalCSV = header + '\n' + rows.join('\n');
+      console.log("Final CSV data:", finalCSV);
+      
+      return finalCSV;
+  } catch (error) {
+      console.error("Error in getFilteredData:", error);
+      // Return a simple valid CSV as fallback
+      const fallbackCSV = "subCode,error\n\"error\",\"" + error.message + "\"";
+      return fallbackCSV;
+  }
+}
+// Configure data saving
 const save_data = {
-    type: jsPsychPipe, 
+    type: jsPsychPipe,
     action: "save",
     experiment_id: "DvojIUx5ETI3",
-    filename: filename,
-    data_string: () => jsPsych.data.get().csv()
+    filename: `${participant_id}.csv`,
+    data_string: getFilteredData,
+    success_callback: function() {
+        console.log('Data saved successfully to DataPipe!');
+        console.log('Participant ID:', participant_id);
+        console.log('Filename:', `${participant_id}.csv`);
+        jsPsych.data.addProperties({
+            completed: true
+        });
+    },
+    error_callback: function(error) {
+        console.error('Error saving to DataPipe:', error);
+        console.error('Error details:', JSON.stringify(error));
+        
+        // Try to get more information about the error
+        if (error.response) {
+            console.error('Response status:', error.response.status);
+            console.error('Response data:', error.response.data);
+        }
+        
+        // Display error to user
+        jsPsych.endExperiment(`<p>There was an error saving your data. Please contact the researcher with this information: ${error}</p><p>Error code: ${error.status || 'unknown'}</p>`);
+    }
 };
+
+const completion_code_trial = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: function() {
+      return `
+          <p>You have completed the main experiment!</p>
+          <p>Your completion code is: <strong>${completion_code}</strong></p>
+          <p>Please make a note of this code - you will need to enter it in SONA to receive credit.</p>
+          <p>You can close the page now.</p>
+      `;
+  },
+  choices: ['Finish'],
+  data: {
+      trial_type: 'completion'
+  },
+  on_finish: function() {
+      window.location.href = `https://uwmadison.sona-systems.com/default.aspx?logout=Y`;
+  }
+};
+
+// Main function to run the experiment
+async function runExperiment() {
+    try {
+        console.log('Starting experiment...');
+        console.log('Participant ID:', participant_id);
+        console.log('Completion code:', completion_code);
+        
+        // Load trials
+        const trialsData = await loadTrials();
+        console.log('Loaded trials:', trialsData.length);
+        
+        // Log sample trial data
+        if (trialsData.length > 0) {
+            console.log('Sample trial data:', trialsData[0]);
+        }
+        
+        // Create full timeline with loaded trials
+        const experimentTrials = createTrials(trialsData);
+        console.log('Created experiment trials:', experimentTrials.length);
+            
+        timeline = [
+            consent,
+            instructions,
+            preload,
+            ...experimentTrials,
+            save_data,
+            completion_code_trial
+        ];
+
+        console.log('Timeline initialized with', timeline.length, 'items');
+        console.log('Starting jsPsych...');
+
+        // Run the experiment
+        jsPsych.run(timeline);
+    } catch (error) {
+        console.error('Error running experiment:', error);
+        console.error('Error stack:', error.stack);
+        // Display error message on the page
+        document.getElementById('jspsych-target').innerHTML = `
+            <div style="max-width: 800px; margin: 50px auto; padding: 20px; background: #f8f8f8; border-radius: 5px;">
+                <h2>Error Starting Experiment</h2>
+                <p>There was a problem starting the experiment. Please try refreshing the page.</p>
+                <p>If the problem persists, please contact the researcher.</p>
+                <p>Technical details: ${error.message}</p>
+                <pre style="background: #f1f1f1; padding: 10px; overflow: auto;">${error.stack}</pre>
+            </div>
+        `;
+    }
+}
 
 // Function to load trials from CSV
 async function loadTrials() {
     try {
-        const csvFilename = 'demo_trials.csv'; // Path to your trials file, will need to udpate once all videos are done
+        const csvFilename = 'demo_trials.csv'; // Path to your trials file
         
         const response = await fetch(csvFilename);
         const csvText = await response.text();
@@ -175,41 +318,6 @@ async function loadTrials() {
     } catch (error) {
         console.error('Error loading trials:', error);
         return [];
-    }
-}
-
-// Main function to run the experiment
-async function runExperiment() {
-    try {
-        // Load trials
-        const trialsData = await loadTrials();
-        console.log('Loaded trials:', trialsData.length);
-        
-
-        // Create full timeline with loaded trials
-        const experimentTrials = createTrials(trialsData);
-            
-        timeline = [
-            consent,
-            instructions,
-            preload,
-            ...experimentTrials,
-            save_data
-            ];
-
-        // Run the experiment
-        jsPsych.run(timeline);
-    } catch (error) {
-        console.error('Error running experiment:', error);
-        // Display error message on the page
-        document.getElementById('jspsych-target').innerHTML = `
-            <div style="max-width: 800px; margin: 50px auto; padding: 20px; background: #f8f8f8; border-radius: 5px;">
-                <h2>Error Starting Experiment</h2>
-                <p>There was a problem starting the experiment. Please try refreshing the page.</p>
-                <p>If the problem persists, please contact the researcher.</p>
-                <p>Technical details: ${error.message}</p>
-            </div>
-        `;
     }
 }
 
