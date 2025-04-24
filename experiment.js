@@ -107,7 +107,7 @@ function createTrials(trialsData) {
                 word: trial.word,
                 dimension: trial.dimension,
                 filename: videoFile,
-                action: trial.action,
+
                 trial_type: 'video-text-response'
             },
             on_finish: function(data) {
@@ -156,7 +156,7 @@ function getFilteredData() {
   
   try {
       // Define the columns we want to keep
-      const columns = ['subCode', 'trial_num', 'word', 'dimension', 'filename', 'action', 'rt', 'description'];
+      const columns = ['subCode', 'trial_num', 'word', 'dimension', 'filename', 'rt', 'description'];
       
       // Create header row
       const header = columns.join(',');
