@@ -294,7 +294,7 @@ async function runExperiment() {
 // Function to load trials from CSV
 async function loadTrials() {
     try {
-        const csvFilename = 'demo_trials.csv'; // Path to your trials file
+        const csvFilename = 'trials.csv'; // Path to your trials file
         
         const response = await fetch(csvFilename);
         const csvText = await response.text();
