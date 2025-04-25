@@ -141,7 +141,7 @@ var jsPsychVideoTextResponse = (function (jspsych) {
 
       // Display the video
       html += '<div id="jspsych-video-text-response-stimulus">';
-      html += '<video controls muted id="jspsych-video-text-response-video" width="' + trial.width + '" height="' + trial.height + '"';
+      html += '<video id="jspsych-video-text-response-video" width="' + trial.width + '" height="' + trial.height + '"';
       
       if(trial.autoplay){
         html += " autoplay";
@@ -150,7 +150,7 @@ var jsPsychVideoTextResponse = (function (jspsych) {
         html += " loop";
       }
       if(trial.controls){
-        html += " controls";
+        html += " controls muted";
       }
       html += ">";
       
