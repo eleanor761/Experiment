@@ -150,7 +150,7 @@ var jsPsychVideoTextResponse = (function (jspsych) {
         html += " loop";
       }
       if(trial.controls){
-        html += " controls muted";
+        html += " controls";
       }
       html += ">";
       
@@ -244,7 +244,7 @@ var jsPsychVideoTextResponse = (function (jspsych) {
           checkEnableButton();
         }
       });
-      
+      video_element.muted = true; // Mute the video
       // Also handle ended event (for non-looping videos)
       video_element.addEventListener('ended', function() {
         console.log('Video ended event fired');
