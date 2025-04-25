@@ -1,30 +1,85 @@
-trial_num,count,type,dimension,filename,action
-1,1,batent,initial,batent1.mp4,straighten frame
-2,2,batent,initial,batent2.mp4,straighten frame
-3,3,batent,initial,batent3.mp4,straighten frame
-4,4,batent,initial,batent4.mp4,straighten frame
-5,1,cabush,initial,cabush1.mp4,align books
-6,2,cabush,initial,cabush2.mp4,align books
-7,3,cabush,initial,cabush3.mp4,align books
-8,4,cabush,initial,cabush4.mp4,align books
-9,1,fremple,initial,fremple1.mp4,cut square
-10,2,fremple,initial,fremple2.mp4,cut square
-11,3,fremple,initial,fremple3.mp4,cut square
-12,4,fremple,initial,fremple4.mp4,cut square
-13,1,joicate,initial,joicate1.mp4,seal envelope
-14,1,lorice,initial,lorice1.mp4,pot to stove
-15,2,lorice,initial,lorice2.mp4,pot to stove
-16,3,lorice,initial,lorice3.mp4,pot to stove
-17,4,lorice,initial,lorice4.mp4,pot to stove
-18,1,nulmut,initial,nulmut1.mp4,hang coat
-19,2,nulmut,initial,nulmut2.mp4,hang coat
-20,3,nulmut,initial,nulmut3.mp4,hang coat
-21,1,pulact,initial,pulact1.mp4,rip paper
-22,1,punson,initial,punson1.mp4,cut to container
-23,2,punson,initial,punson2.mp4,cut to container
-24,3,punson,initial,punson3.mp4,cut to container
-25,1,samode,initial,samode1.mp4,cover candle
-26,1,traimin,object,traimin_obj.mp4,hole in cards
-27,1,traimin,initial,traimin1.mp4,hole in pile
-28,2,traimin,initial,traimin2.mp4,hole in pile
-29,3,traimin,initial,traimin3.mp4,hole in pile
+trial_num,word,dimension,filename
+0,barbul,diff_obj,barbul_diff_obj.mp4
+1,barbul,diff_process,barbul_diff_proc.mp4
+2,barbul,diff_state,barbul_diff_state.mp4
+3,barbul,same_obj,barbul_same_obj.mp4
+4,barbul,same_state,barbul_same_state.mp4
+5,barbul,intial,barbul1.mp4
+6,batent,diff_obj,batent_diff_obj.mp4
+7,batent,diff_process,batent_diff_proc.mp4
+8,batent,diff_state,batent_diff_state.mp4
+9,batent,same_obj,batent_same_obj.mp4
+10,batent,same_process,batent_same_proc.mp4
+11,batent,same_state,batent_same_state.mp4
+12,batent,initial,batent1.mp4
+13,batent,intial,batent2.mp4
+14,batent,initial,batent3.mp4
+15,batent,initial,batent4.mp4
+16,cabush,all_diff,cabush_all_diff.mp4
+17,cabush,diff_obj,cabush_diff_obj.mp4
+18,cabush,diff_process,cabush_diff_proc.mp4
+19,cabush,diff_state,cabush_diff_state.mp4
+20,cabush,same_obj,cabush_same_obj.mp4
+21,cabush,same_state,cabush_same_state.mp4
+22,cabush,initial,cabush1.mp4
+23,cabush,initial,cabush2.mp4
+24,cabush,initial,cabush3.mp4
+25,cabush,initial,cabush4.mp4
+26,fremple,diff_obj,fremple_diff_obj.mp4
+27,fremple,diff_process,fremple_diff_proc.mp4
+28,fremple,diff_state,fremple_diff_state.mp4
+29,fremple,same_obj,fremple_same_obj.mp4
+30,fremple,same_process,fremple_same_proc.mp4
+31,fremple,same_state,fremple_same_state.mp4
+32,fremple,initial,fremple1.mp4
+33,fremple,initial,fremple2.mp4
+34,fremple,initial,fremple3.mp4
+35,fremple,initial,fremple4.mp4
+36,traimin,diff_obj,traimin_diff_obj.mp4
+37,traimin,diff_proc,traimin_diff_proc.mp4
+38,traimin,diff_state,traimin_diff_state.mp4
+39,traimin,same_obj,traimin_same_obj.mp4
+40,traimin,same_proc,traimin_same_proc.mp4
+41,traimin,initial,traimin1.mp4
+42,traimin,initial,traimin2.mp4
+43,traimin,initial,traimin3.mp4
+44,pulact,diff_obj,pulact_diff_obj.mp4
+45,pulact,diff_proc,pulact_diff_proc.mp4
+46,pulact,diff_state,pulact_diff_state.mp4
+47,pulact,same_proc,pulact_same_proc.mp4
+48,pulact,same_state,pulact_same_state.mp4
+49,pulact,initial,pulact1.mp4
+50,nulmut,all_diff,nulmut_all_diff.mp4
+51,nulmut,diff_obj,nulmut_diff_obj.mp4
+52,nulmut,diff_proc,nulmut_diff_proc.mp4
+53,nulmut,diff_state,nulmut_diff_state.mp4
+54,nulmut,same_obj,nulmut_same_obj.mp4
+55,nulmut,same_proc,nulmut_same_proc.mp4
+56,nulmut,same_state,nulmut_same_state.mp4
+57,nulmut,initial,nulmut1.mp4
+58,nulmut,initial,nulmut2.mp4
+59,nulmut,initial,nulmut3.mp4
+60,lorice,same_state,lorice_same_state.mp4
+61,lorice,diff_obj,lorice_diff_obj.mp4
+62,lorice,diff_proc,lorice_diff_proc.mp4
+63,lorice,diff_state,lorice_diff_state.mp4
+64,lorice,same_obj,lorice_same_obj.mp4
+65,lorice,same_proc,lorice_same_proc.mp4
+66,lorice,initial,lorice1.mp4
+67,lorice,initial,lorice2.mp4
+68,lorice,initial,lorice3.mp4
+69,lorice,initial,lorice4.mp4
+70,joicate,diff_obj,joicate_diff_obj.mp4
+71,joicate,diff_proc,joicate_diff_proc.mp4
+72,joicate,diff_state,joicate_diff_state.mp4
+73,joicate,initial,joicate1.mp4
+74,joicate,same_obj,joicate_same_obj.mp4
+75,joicate,same_proc,joicate_same_proc.mp4
+76,joicate,same_state,joicate_same_state.mp4
+77,pulact,same_obj,pulact_same_obj.mp4
+78,pulact,intial,pulact2.mp4
+79,pulact,initial,pulact3.mp4
+80,cabush,same_proc,cabush_same_proc.mp4
+81,barbul,same_proc,barbul_same_proc.mp4
+82,barbul,initial,barbul2.mp4
+83,barbul,initial,barbul3.mp4
