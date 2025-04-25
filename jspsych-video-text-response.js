@@ -150,7 +150,7 @@ var jsPsychVideoTextResponse = (function (jspsych) {
         html += " loop";
       }
       if(trial.controls){
-        html += " controls muted";
+        html += " controls";
       }
       html += ">"; // added mute attribute
       
