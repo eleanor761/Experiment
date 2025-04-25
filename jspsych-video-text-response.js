@@ -150,9 +150,9 @@ var jsPsychVideoTextResponse = (function (jspsych) {
         html += " loop";
       }
       if(trial.controls){
-        html += " controls";
+        html += " controls muted";
       }
-      html += " muted >"; // added mute attribute
+      html += ">"; // added mute attribute
       
       var video_preload_blob = this.jsPsych.pluginAPI.getVideoBuffer(trial.stimulus[0]);
       if (!video_preload_blob) {
