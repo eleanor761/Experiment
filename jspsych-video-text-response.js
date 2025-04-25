@@ -141,7 +141,7 @@ var jsPsychVideoTextResponse = (function (jspsych) {
 
       // Display the video
       html += '<div id="jspsych-video-text-response-stimulus">';
-      html += '<video id="jspsych-video-text-response-video" width="' + trial.width + '" height="' + trial.height + '"';
+      html += '<video muted id="jspsych-video-text-response-video" width="' + trial.width + '" height="' + trial.height + '"';
       
       if(trial.autoplay){
         html += " autoplay";
@@ -149,9 +149,9 @@ var jsPsychVideoTextResponse = (function (jspsych) {
       if(trial.loop){
         html += " loop";
       }
-      if(trial.controls){
-        html += " controls muted";
-      }
+      //if(trial.controls){
+        //html += " controls muted";
+      //}
       html += ">";
       
       var video_preload_blob = this.jsPsych.pluginAPI.getVideoBuffer(trial.stimulus[0]);
