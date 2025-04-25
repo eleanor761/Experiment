@@ -57,7 +57,7 @@ trial_num,word,dimension,filename
 55,nulmut,same_proc,nulmut_same_proc.mp4
 56,nulmut,same_state,nulmut_same_state.mp4
 57,nulmut,initial,nulmut1.mp4
-,,,
+58,nulmut,initial,nulmut2.mp4
 59,nulmut,initial,nulmut3.mp4
 60,lorice,same_state,lorice_same_state.mp4
 61,lorice,diff_obj,lorice_diff_obj.mp4
