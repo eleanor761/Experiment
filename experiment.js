@@ -225,8 +225,6 @@ const completion_code_trial = {
   stimulus: function() {
       return `
           <p>You have completed the main experiment!</p>
-          <p>Your completion code is: <strong>${completion_code}</strong></p>
-          <p>Please make a note of this code - you will need to enter it in SONA to receive credit.</p>
           <p>You can close the page now.</p>
       `;
   },
